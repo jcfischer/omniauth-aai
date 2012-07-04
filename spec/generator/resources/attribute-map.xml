@@ -1,0 +1,271 @@
+<Attributes xmlns="urn:mace:shibboleth:2.0:attribute-map"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:switchmd="http://www.switch.ch/aai/metadata/extensions">
+
+    <!--
+        attribute-map.xml
+
+        SWITCHaai federation attribute-map configuration file
+        based on SWITCHaai attribute specification v 1.3, 2010-06-23
+    -->
+
+    <!-- Core attributes -->
+
+    <!-- Unique ID -->
+    <Attribute name="urn:mace:switch.ch:attribute-def:swissEduPersonUniqueID" id="Shib-SwissEP-UniqueID" aliases="uniqueID"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.1" id="Shib-SwissEP-UniqueID" aliases="uniqueID"/>
+
+    <!-- A persistent id attribute that supports personalized anonymous access. -->
+
+    <!-- First, the deprecated version, decoded as a scoped string: -->
+    <Attribute name="urn:mace:dir:attribute-def:eduPersonTargetedID" id="targeted-id">
+        <AttributeDecoder xsi:type="ScopedAttributeDecoder"/>
+        <!-- <AttributeDecoder xsi:type="NameIDFromScopedAttributeDecoder" formatter="$NameQualifier!$SPNameQualifier!$Name" defaultQualifiers="true"/> -->
+    </Attribute>
+
+    <!-- Second, an alternate decoder that will turn the deprecated form into the newer form. -->
+    <!--
+    <Attribute name="urn:mace:dir:attribute-def:eduPersonTargetedID" id="persistent-id">
+        <AttributeDecoder xsi:type="NameIDFromScopedAttributeDecoder" formatter="$NameQualifier!$SPNameQualifier!$Name" defaultQualifiers="true"/>
+    </Attribute>
+    -->
+
+    <!-- Third, the new version (note the OID-style name): -->
+    <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.1.1.10" id="persistent-id">
+        <AttributeDecoder xsi:type="NameIDAttributeDecoder" formatter="$NameQualifier!$SPNameQualifier!$Name" defaultQualifiers="true"/>
+    </Attribute>
+
+    <!-- Fourth, the SAML 2.0 NameID Format: -->
+    <Attribute name="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" id="persistent-id">
+        <AttributeDecoder xsi:type="NameIDAttributeDecoder" formatter="$NameQualifier!$SPNameQualifier!$Name" defaultQualifiers="true"/>
+    </Attribute>
+
+    <!-- Surname -->
+    <Attribute name="urn:mace:dir:attribute-def:sn" id="Shib-Person-surname" aliases="surname"/>
+    <Attribute name="urn:oid:2.5.4.4" id="Shib-Person-surname" aliases="surname"/>
+
+    <!-- Given name -->
+    <Attribute name="urn:mace:dir:attribute-def:givenName" id="Shib-InetOrgPerson-givenName" aliases="givenName"/>
+    <Attribute name="urn:oid:2.5.4.42" id="Shib-InetOrgPerson-givenName" aliases="givenName"/>
+
+    <!-- E-mail address -->
+    <Attribute name="urn:mace:dir:attribute-def:mail" id="Shib-InetOrgPerson-mail" aliases="mail"/>
+    <Attribute name="urn:oid:0.9.2342.19200300.100.1.3" id="Shib-InetOrgPerson-mail" aliases="mail"/>
+
+    <!-- Home organization -->
+    <Attribute name="urn:mace:switch.ch:attribute-def:swissEduPersonHomeOrganization" id="Shib-SwissEP-HomeOrganization" aliases="homeOrganization"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.4" id="Shib-SwissEP-HomeOrganization" aliases="homeOrganization"/>
+
+    <!-- Home organization type -->
+    <Attribute name="urn:mace:switch.ch:attribute-def:swissEduPersonHomeOrganizationType" id="Shib-SwissEP-HomeOrganizationType" aliases="homeOrganizationType">
+        <AttributeDecoder xsi:type="StringAttributeDecoder" caseSensitive="false"/>
+    </Attribute>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.5" id="Shib-SwissEP-HomeOrganizationType" aliases="homeOrganizationType">
+        <AttributeDecoder xsi:type="StringAttributeDecoder" caseSensitive="false"/>
+    </Attribute>
+
+    <!-- Affiliation -->
+    <!-- to maintain backwards compatibility in SWITCHaai, the id is
+         "affiliation" instead of "unscoped-affiliation"
+    -->
+    <Attribute name="urn:mace:dir:attribute-def:eduPersonAffiliation" id="affiliation" aliases="Shib-EP-Affiliation"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.1.1.1" id="affiliation" aliases="Shib-EP-Affiliation"/>
+
+    <!-- Other attributes -->
+
+    <!-- User ID -->
+    <Attribute name="urn:mace:dir:attribute-def:uid" id="Shib-Person-uid" aliases="uid"/>
+    <Attribute name="urn:oid:0.9.2342.19200300.100.1.1" id="Shib-Person-uid" aliases="uid"/>
+
+    <!-- Matriculation number -->
+    <Attribute name="urn:mace:switch.ch:attribute-def:swissEduPersonMatriculationNumber" id="Shib-SwissEP-MatriculationNumber" aliases="matriculationNumber"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.11" id="Shib-SwissEP-MatriculationNumber" aliases="matriculationNumber"/>
+
+    <!-- Employee number -->
+    <Attribute name="urn:mace:dir:attribute-def:employeeNumber" id="Shib-InetOrgPerson-employeeNumber" aliases="employeeNumber"/>
+    <Attribute name="urn:oid:2.16.840.1.113730.3.1.3" id="Shib-InetOrgPerson-employeeNumber" aliases="employeeNumber"/>
+
+    <!-- Card UID -->
+    <Attribute name="urn:mace:switch.ch:attribute-def:swissEduPersonCardUID" id="Shib-SwissEP-CardUID" aliases="cardUID"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.12" id="Shib-SwissEP-CardUID" aliases="cardUID"/>
+
+    <!-- Nick name -->
+    <Attribute name="urn:mace:dir:attribute-def:eduPersonNickname" id="nickname"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.1.1.2" id="nickname"/>
+
+    <!-- Date of birth -->
+    <Attribute name="urn:mace:switch.ch:attribute-def:swissEduPersonDateOfBirth" id="Shib-SwissEP-DateOfBirth" aliases="dateOfBirth"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.2" id="Shib-SwissEP-DateOfBirth" aliases="dateOfBirth"/>
+
+    <!-- Gender -->
+    <Attribute name="urn:mace:switch.ch:attribute-def:swissEduPersonGender" id="Shib-SwissEP-Gender" aliases="gender"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.3" id="Shib-SwissEP-Gender" aliases="gender"/>
+
+    <!-- Preferred Language -->
+    <Attribute name="urn:mace:dir:attribute-def:preferredLanguage" id="Shib-InetOrgPerson-preferredLanguage" aliases="preferredLanguage"/>
+    <Attribute name="urn:oid:2.16.840.1.113730.3.1.39" id="Shib-InetOrgPerson-preferredLanguage" aliases="preferredLanguage"/>
+
+    <!-- Home postal address -->
+    <Attribute name="urn:mace:dir:attribute-def:homePostalAddress" id="Shib-InetOrgPerson-homePostalAddress" aliases="homePostalAddress"/>
+    <Attribute name="urn:oid:0.9.2342.19200300.100.1.39" id="Shib-InetOrgPerson-homePostalAddress" aliases="homePostalAddress"/>
+
+    <!-- Business postal address -->
+    <Attribute name="urn:mace:dir:attribute-def:postalAddress" id="Shib-OrgPerson-postalAddress" aliases="postalAddress"/>
+    <Attribute name="urn:oid:2.5.4.16" id="Shib-OrgPerson-postalAddress" aliases="postalAddress"/>
+
+    <!-- Private phone number -->
+    <Attribute name="urn:mace:dir:attribute-def:homePhone" id="Shib-InetOrgPerson-homePhone" aliases="homePhone"/>
+    <Attribute name="urn:oid:0.9.2342.19200300.100.1.20" id="Shib-InetOrgPerson-homePhone" aliases="homePhone"/>
+
+    <!-- Business phone number -->
+    <Attribute name="urn:mace:dir:attribute-def:telephoneNumber" id="Shib-Person-telephoneNumber" aliases="telephoneNumber"/>
+    <Attribute name="urn:oid:2.5.4.20" id="Shib-Person-telephoneNumber" aliases="telephoneNumber"/>
+
+    <!-- Mobile phone number -->
+    <Attribute name="urn:mace:dir:attribute-def:mobile" id="Shib-InetOrgPerson-mobile" aliases="mobile"/>
+    <Attribute name="urn:oid:0.9.2342.19200300.100.1.41" id="Shib-InetOrgPerson-mobile" aliases="mobile"/>
+
+    <!-- Scoped Affiliation -->
+    <!-- to maintain backwards compatibility in SWITCHaai, the id is
+         "scoped-affiliation" instead of "affiliation"
+    -->
+    <Attribute name="urn:mace:dir:attribute-def:eduPersonScopedAffiliation" id="scoped-affiliation">
+        <AttributeDecoder xsi:type="ScopedAttributeDecoder" caseSensitive="false"/>
+    </Attribute>
+    <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.1.1.9" id="scoped-affiliation">
+        <AttributeDecoder xsi:type="ScopedAttributeDecoder" caseSensitive="false"/>
+    </Attribute>
+
+    <!-- Primary affiliation -->
+    <Attribute name="urn:mace:dir:attribute-def:eduPersonPrimaryAffiliation" id="primary-affiliation">
+        <AttributeDecoder xsi:type="StringAttributeDecoder" caseSensitive="false"/>
+    </Attribute>
+    <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.1.1.5" id="primary-affiliation">
+        <AttributeDecoder xsi:type="StringAttributeDecoder" caseSensitive="false"/>
+    </Attribute>
+
+    <!-- Study branch 1 -->
+    <!-- @Deprecated id: mapped as an alias -->
+    <Attribute name="urn:mace:switch.ch:attribute-def:swissEduPersonStudyBranch1" id="Shib-SwissEP-StudyBranch1" aliases="studyBranch1 Shib-SwissEP-swissEduPersonStudyBranch1"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.6" id="Shib-SwissEP-StudyBranch1" aliases="studyBranch1 Shib-SwissEP-swissEduPersonStudyBranch1"/>
+
+    <!-- Study branch 2 -->
+    <!-- @Deprecated id: mapped as an alias -->
+    <Attribute name="urn:mace:switch.ch:attribute-def:swissEduPersonStudyBranch2" id="Shib-SwissEP-StudyBranch2" aliases="studyBranch2 Shib-SwissEP-swissEduPersonStudyBranch2"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.7" id="Shib-SwissEP-StudyBranch2" aliases="studyBranch2 Shib-SwissEP-swissEduPersonStudyBranch2"/>
+
+    <!-- Study branch 3 -->
+    <!-- @Deprecated id: mapped as an alias -->
+    <Attribute name="urn:mace:switch.ch:attribute-def:swissEduPersonStudyBranch3" id="Shib-SwissEP-StudyBranch3" aliases="studyBranch3 Shib-SwissEP-swissEduPersonStudyBranch3"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.8" id="Shib-SwissEP-StudyBranch3" aliases="studyBranch3 Shib-SwissEP-swissEduPersonStudyBranch3"/>
+
+    <!-- Study level -->
+    <!-- @Deprecated id: mapped as an alias -->
+    <Attribute name="urn:mace:switch.ch:attribute-def:swissEduPersonStudyLevel" id="Shib-SwissEP-StudyLevel" aliases="studyLevel Shib-SwissEP-swissEduPersonStudyLevel"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.9" id="Shib-SwissEP-StudyLevel" aliases="studyLevel Shib-SwissEP-swissEduPersonStudyLevel"/>
+
+    <!-- Staff category -->
+    <!-- @Deprecated id: mapped as an alias -->
+    <Attribute name="urn:mace:switch.ch:attribute-def:swissEduPersonStaffCategory" id="Shib-SwissEP-StaffCategory" aliases="staffCategory Shib-SwissEP-swissEduPersonStaffCategory"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.10" id="Shib-SwissEP-StaffCategory" aliases="staffCategory Shib-SwissEP-swissEduPersonStaffCategory"/>
+
+    <!-- Organization path -->
+    <Attribute name="urn:mace:dir:attribute-def:eduPersonOrgDN" id="Shib-EP-OrgDN" aliases="org-dn orgDN"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.1.1.3" id="Shib-EP-OrgDN" aliases="org-dn orgDN"/>
+
+    <!-- Organizational unit path -->
+    <Attribute name="urn:mace:dir:attribute-def:eduPersonOrgUnitDN" id="Shib-EP-OrgUnitDN" aliases="orgunit-dn orgUnitDN"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.1.1.4" id="Shib-EP-OrgUnitDN" aliases="orgunit-dn orgUnitDN"/>
+
+    <!-- Primary organizational unit -->
+    <Attribute name="urn:mace:dir:attribute-def:eduPersonPrimaryOrgUnitDN" id="primary-orgunit-dn"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.1.1.8" id="primary-orgunit-dn"/>
+
+    <!-- Entitlement -->
+    <Attribute name="urn:mace:dir:attribute-def:eduPersonEntitlement" id="Shib-EP-Entitlement" aliases="entitlement"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7" id="Shib-EP-Entitlement" aliases="entitlement"/>
+
+    <!-- Assurance Level -->
+    <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.1.1.11" id="assurance"/>
+
+    <!-- Member Of -->
+    <!--
+    <Attribute name="urn:mace:dir:attribute-def:isMemberOf" id="Shib-eduMember-isMemberOf" aliases="isMemberOf"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.5.1.1" id="Shib-eduMember-isMemberOf" aliases="isMemberOf"/>
+    -->
+
+    <!-- Bilaterally defined attributes -->
+
+    <!-- Organizational Unit -->
+    <!--
+    <Attribute name="urn:mace:dir:attribute-def:ou" id="Shib-Person-ou" aliases="ou"/>
+    <Attribute name="urn:oid:2.5.4.11" id="Shib-Person-ou" aliases="ou"/>
+    -->
+
+    <!-- Authorization attribute -->
+    <!--
+    <Attribute name="urn:mace:switch.ch:attribute-def:UniBEapplAuthorisation" id="Shib-Custom-uniBeApplAuthorisation" aliases="uniBEApplAuthorisation"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.1000" id="Shib-Custom-uniBeApplAuthorisation" aliases="uniBEApplAuthorisation"/>
+    -->
+
+    <!-- AAA Usage Limit -->
+    <!--
+    <Attribute name="urn:mace:switch.ch:aaitest:aaa.unibe.ch:attribute-def:UsageLimit" id="Shib-Custom-unibeUsageLimit" aliases="unibeUsageLimit"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.1001" id="Shib-Custom-unibeUsageLimit" aliases="unibeUsageLimit"/>
+    -->
+
+    <!-- Lausanne Group membership -->
+    <!--
+    <Attribute name="urn:mace:switch.ch:SWITCHaai:unil.ch:unilMemberOf" id="Shib-Custom-unilMemberOf" aliases="unilMemberOf"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.1003" id="Shib-Custom-unilMemberOf" aliases="unilMemberOf"/>
+    -->
+
+    <!-- Organization Unit Code -->
+    <!--
+    <Attribute name="urn:mace:switch.ch:SWITCHaai:unige.ch:attribute-def:unigeChOuCode" id="Shib-Custom-unigeOuCode" aliases="unigeOuCode"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.1004" id="Shib-Custom-unigeOuCode" aliases="unigeOuCode"/>
+    -->
+
+    <!-- UZH SAP User ID -->
+    <!--
+    <Attribute name="urn:mace:unizh.ch:uzhSapUserId" id="Shib-Custom-uzhSAPUserId" aliases="uzhSAPUserId"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.11817.1.1.2.13" id="Shib-Custom-uzhSAPUserId" aliases="uzhSAPUserId"/>
+    -->
+
+    <!-- Faculte principale a l'Universite de Lausanne -->
+    <!--
+    <Attribute name="urn:mace:switch.ch:SWITCHaai:unil.ch:unilFacultePrincipale" id="Shib-Custom-unilFacultePrincipale" aliases="unilFacultePrincipale"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.1006" id="Shib-Custom-unilFacultePrincipale" aliases="unilFacultePrincipale"/>
+    -->
+
+    <!-- FHNW IDPerson (Evento) -->
+    <!--
+    <Attribute name="urn:mace:switch.ch:SWITCHaai:fhnw.ch:attribute-def:fhnwIDPerson" id="Shib-Custom-fhnwIDPerson" aliases="fhnwIDPerson"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.1009" id="Shib-Custom-fhnwIDPerson" aliases="fhnwIDPerson"/>
+    -->
+
+    <!-- Uni Basel specific roles -->
+    <!--
+    <Attribute name="urn:mace:switch.ch:SWITCHaai:unibas.ch:unibasChRoles" id="Shib-Custom-unibasChRoles" aliases="unibasChRoles"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.22865.10.1.1.19" id="Shib-Custom-unibasChRoles" aliases="unibasChRoles"/>
+    -->
+
+    <!-- FHNW SAP UserID -->
+    <!--
+    <Attribute name="urn:mace:switch.ch:SWITCHaai:fhnw.ch:attribute-def:fhnwSapUserID" id="Shib-Custom-fhnwSapUserID" aliases="fhnwSapUserID"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.1010" id="Shib-Custom-fhnwSapUserID" aliases="fhnwSapUserID"/>
+    -->
+
+    <!-- FHNW SAP Additional User Information -->
+    <!--
+    <Attribute name="urn:mace:switch.ch:SWITCHaai:fhnw.ch:attribute-def:fhnwSapUserInfo" id="Shib-Custom-fhnwSapUserInfo" aliases="fhnwSapUserInfo"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.1011" id="Shib-Custom-fhnwSapUserInfo" aliases="fhnwSapUserInfo"/>
+    -->
+
+    <!-- FHNW UserPrincipalName (ActiveDirectory) -->
+    <!--
+    <Attribute name="urn:mace:switch.ch:SWITCHaai:fhnw.ch:attribute-def:fhnwUPN" id="Shib-Custom-fhnwUPN" aliases="fhnwUPN"/>
+    <Attribute name="urn:oid:2.16.756.1.2.5.1.1.1012" id="Shib-Custom-fhnwUPN" aliases="fhnwUPN"/>
+    -->
+
+</Attributes>

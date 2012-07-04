@@ -1,0 +1,51 @@
+# OMNIAUTH FIELDS
+#
+# request.env["omniauth.auth"] - Schema
+#   - provider(required) - "shibboleth"
+#   - uid (required) - UID Field #persistent-id oder unique-id
+#   - info (see fields key in config)
+#     - name (required) 
+#     - email (required if possible)
+#     - nickname 
+#     - first_name
+#     - last_name
+#     - location
+#     - description
+#     - image (URL) 
+#     - phone
+#     - urls
+#   - credentials
+#     - token
+#     - secret
+#   - extra (see extra_fields in config)
+#     - raw_info
+#       - all other fields ...
+#
+# SIBBOLETH
+# 
+# fields
+<%- attribute_fields.keys.each do | k |  %>
+#        "<%= a %>",
+<% end  %>
+# aliases
+<%- attribute_fields.values.each do | a_s |  %>
+  <%- aliases.each do | a | %>
+#        "<%= a %>",
+  <%- end  %>
+<%- end  %>
+
+
+
+OmniAuth.config.logger = Rails.logger
+
+Rails.application.config.middleware.use OmniAuth::Builder do
+#  if Rails.env.development?
+#    provider :developer 
+#  else
+#    provider :shibboleth, {
+#      :uid_field => :tbd,
+#      :extra_fields => [],
+#      :fields => []
+#    }
+#  end
+end
