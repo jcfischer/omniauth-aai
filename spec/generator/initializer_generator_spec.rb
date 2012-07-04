@@ -14,7 +14,6 @@ describe "initializer generator" do
       @output << `cd #{@rails_root_path}`
       @output << `bundle install`
       @output << `bundle exec rails generate shibboleth:initializer`
-      raise @output.inspect
       File.exists?( @init_file_path ).should( be_true, @output)
     end
   end

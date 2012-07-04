@@ -1,7 +1,6 @@
-module OmniauthShibboleth
+module Aai
   module Generators
     class InitializerGenerator < Rails::Generators::Base
-      namespace "shibboleth"
 
       source_root File.expand_path("../templates", __FILE__)
       
