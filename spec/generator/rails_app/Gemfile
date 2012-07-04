@@ -8,4 +8,4 @@ gem 'rails', '3.2.6'
 gem 'sqlite3'
 gem 'nokogiri'
 
-gem 'omniauth-shibboleth', :git => "git://github.com/beffa/omniauth-shibboleth.git"
+gem 'omniauth-shibboleth', :git => "git://github.com/switch-ch/omniauth-shibboleth.git"
