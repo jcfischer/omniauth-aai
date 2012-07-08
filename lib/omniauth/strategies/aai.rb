@@ -1,3 +1,4 @@
+require 'omniauth-shibboleth'
 module OmniAuth
   module Strategies
     class Aai < OmniAuth::Strategies::Shibboleth

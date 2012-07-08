@@ -53,7 +53,7 @@ In development / local mode you can use the following mock (with default SWITCHa
       provider :developer, {
         :uid_field => :'persistent-id',
         :fields => OmniAuth::Strategies::Aai::DEFAULT_FIELDS,
-        :extra_fields, OmniAuth::Strategies::Aai::DEFAULT_EXTRA_FIELDS
+        :extra_fields => OmniAuth::Strategies::Aai::DEFAULT_EXTRA_FIELDS
       } if Rails.env == 'development'
     end
 
