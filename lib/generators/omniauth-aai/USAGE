@@ -1,2 +1,0 @@
-Usage:
-  rails generate omniauth_shibboleth:initializer path_to_attribute_map_xml
