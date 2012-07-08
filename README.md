@@ -1,101 +1,74 @@
-# OmniAuth Shibboleth strategy
+# OmniAuth AAI strategy
 
-OmniAuth Shibboleth strategy is an OmniAuth strategy for authenticating through Shibboleth (SAML). If you do not know OmniAuth, please visit OmniAuth wiki.
+OmniAuth Shibboleth AAI strategy is an OmniAuth strategy for authenticating through SWITCHaai. 
 
-https://github.com/intridea/omniauth/wiki
+- OmniAuth: https://github.com/intridea/omniauth/wiki
+- Shibboleth: https://wiki.shibboleth.net/
+- SWITCHaai: http://www.switch.ch/aai/index.html
 
-The detail of the authentication middleware Shibboleth is introduced in Shibboleth wiki.
-
-https://wiki.shibboleth.net/
-
-OmniAuth basically works as a middleware of Rack applications. It provides environment variable named 'omniauth.auth' (auth hash) after authenticating a user. The 'auth hash' includes the user's attributes. By providing user attributes in the fixed format, applications can easily implement authentication function using multiple authentication methods.
-
-OmniAuth Shibboleth strategy uses the 'auth hash' for providing user attributes passed by Shibboleth SP. It enables developers to use Shibboleth and the other authentication methods, including local auth, together in one application.
-
-Currently, this document is written for Rails applications. If you tried the other environments and it requires some difficulities, please let me know in the Issues page.
-
-https://github.com/toyokazu/omniauth-shibboleth/issues
+Most functionallity is borrwoed from https://github.com/toyokazu/omniauth-shibboleth
 
 ## Getting Started
 
 ### Installation
 
-    % gem install omniauth-shibboleth
+Install as a gem via Gemfile or with
 
-### Setup Gemfile
+    % gem install omniauth-aai
 
-    % cd rails-app
-    % vi Gemfile
-    gem 'omniauth-shibboleth'
+### Setup SWITCHaai Strategy
 
-### Setup Shibboleth Strategy
+To use Shibboleth SWITCHaai strategy as a middleware in your rails application, add the following file to your rails application initializer directory. (There will be a generator soon)
 
-To use OmniAuth Shibboleth strategy as a middleware in your rails application, add the following file to your rails application initializer directory.
 
-    % vi config/initializer/omniauth.rb
+    # config/initializer/omniauth.rb
     Rails.application.config.middleware.use OmniAuth::Builder do
-      provider :shibboleth, {
-        :extra_fields => [
-          :"unscoped-affiliation",
-          :entitlement
-        ]
-      }
+      provider :aai, {}
     end
 
-In the above example, 'unscoped-affiliation' and 'entitlement' attributes are additionally provided in the raw_info field. They can be referred like request.env["omniauth.auth"]["extra"]["raw_info"]["unscoped-affiliation"]. The detail of the omniauth auth hash schema is described in the following page.
+You will get by default all the standard SWITCHaai values, or you can configure it via options:
 
-https://github.com/intridea/omniauth/wiki/Auth-Hash-Schema
-
-'eppn' attribute is used as uid field. 'displayName' and 'mail' attributes are provided as request.env["omniauth.auth"]["info"]["name"] and request.env["omniauth.auth"]["info"]["email"].
-
-These can be changed by :uid_field and :fields option.
-
-    % vi config/initializer/omniauth.rb
+    # config/initializer/omniauth.rb
     Rails.application.config.middleware.use OmniAuth::Builder do
-      provider :shibboleth, {
-        :uid_field => :uid,
-        :fields => []
+      provider :aai,{
+        :uid_field => :'persistent-id',
+        :fields => [:name, :email, :swiss_ep_uid],
+        :extra_fields => [:'Shib-Authentication-Instant']# See lib/omniauth/strategies/aai.rb for full list.
       }
-    end
 
-In the above example, Shibboleth strategy does not pass any :info fields and use 'uid' attribute as uid fields.
+Fields are provided in the Env as request.env["omniauth.auth"]["info"]["name"] and extra_fields attributes are provided as ['extra']['raw_info']['Shib-Authentication-Instant'].
 
 ### How to authenticate users
 
-In your application, simply direct users to '/auth/shibboleth' to have them sign in via your company's Shibboleth SP and IdP. '/auth/shibboleth' url simply redirect users to '/auth/shibboleth/callback', so thus you must protect '/auth/shibboleth/callback' by Shibboleth SP.
+In your application, simply direct users to '/auth/aai' to have them sign in via your organizations's AAI SP and IdP. '/auth/aai' url simply redirect users to '/auth/aai/callback', so thus you must protect '/auth/aai/callback' by SWITCHaai SP.
 
-Example shibd.conf:
+SWITCHaai strategy just checks the existence of Shib-Session-ID or Shib-Application-ID.
 
-    <Location /application_path/auth/shibboleth/callback>
-      AuthType shibboleth
-      ShibRequestSetting requireSession 1
-      require valid-user
-    </Location>
+### Development Mode
 
-Shibboleth strategy just checks the existence of Shib-Session-ID or Shib-Application-ID.
+In development / local mode you can use the following mock (with default SWITCHaai values):
 
-If you want to use omniauth-shibboleth without Apache or IIS, you can try **rack-saml**. It supports a part of Shibboleth SP functions.
+    # config/initializer/omniauth.rb
+    use OmniAuth::Builder do
+      provider :developer, {
+        :uid_field => :'persistent-id',
+        :fields => OmniAuth::Strategies::Aai::DEFAULT_FIELDS,
+        :extra_fields, OmniAuth::Strategies::Aai::DEFAULT_EXTRA_FIELDS
+      } if Rails.env == 'development'
+    end
 
-https://github.com/toyokazu/rack-saml
+### Debug Mode
 
-Shibboleth strategy assumes the attributes are provided via environment variables because the use of ShibUseHeaders option may cause some problems. The details are discussed in the following page:
+When you deploy a new application, you may want to confirm the assumed attributes are correctly provided by SWITCHaai SP. OmniAuth SWITCHaai strategy provides a confirmation option :debug. If you set :debug true, you can see the environment variables provided at the /auth/aai/callback uri.
 
-https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPSpoofChecking
-
-To provide Shibboleth attributes via environment variables, we can not use proxy_balancer base approach. Currently we can realize it by using Phusion Passenger as an application container. An example construction pattern is shown in presence_checker application (https://github.com/toyokazu/presence_checker/).
-
-### debug mode
-
-When you deploy a new application, you may want to confirm the assumed attributes are correctly provided by Shibboleth SP. OmniAuth Shibboleth strategy provides a confirmation option :debug. If you set :debug true, you can see the environment variables provided at the /auth/shibboleth/callback uri.
-
-    % vi config/initializer/omniauth.rb
+    # config/initializer/omniauth.rb
     Rails.application.config.middleware.use OmniAuth::Builder do
-      provider :shibboleth, { :debug => true }
+      provider :aai, { :debug => true }
     end
 
 ## License (MIT License)
 
-Copyright (C) 2011 by Toyokazu Akiyama.
+Copyright (C) SWITCH, Zurich, original copyright (omniauth-shibboleth) 2011 by Toyokazu Akiyama.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

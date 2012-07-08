@@ -1,4 +1,6 @@
-module Aai
+require 'rails/generators'
+
+module OmniauthAai
   module Generators
     class InitializerGenerator < Rails::Generators::Base
 
