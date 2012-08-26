@@ -40,9 +40,31 @@ Fields are provided in the Env as request.env["omniauth.auth"]["info"]["name"] a
 
 ### How to authenticate users
 
-In your application, simply direct users to '/auth/aai' to have them sign in via your organizations's AAI SP and IdP. '/auth/aai' url simply redirect users to '/auth/aai/callback', so thus you must protect '/auth/aai/callback' by SWITCHaai SP.
+In your application, simply direct users to '/auth/aai' to have them sign in via your organizations's AAI SP and IdP. '/auth/aai' url simply redirect users to '/auth/aai/callback', so thus you must protect '/auth/aai/callback' with something like devise.
 
-SWITCHaai strategy just checks the existence of Shib-Session-ID or Shib-Application-ID.
+SWITCHaai strategy only checks the existence of Shib-Session-ID or Shib-Application-ID, not anything else. See devise or the genrator for further libraries to authenticate user.
+
+### Generator
+
+    rails generate aai:install
+
+This will generate some basic authenthication objects for rails: 
+
+* config/omniauth.rb
+* app/controller/session_controller.rb
+* app/models/user.rb
+* db/migrate/create_users_adapt_and_copy_to_migration.rb
+
+You'll need to configure at least the `db/migrate/create_users_adapt_and_copy_to_migration.rb` file. Just run `rails g migration createUsersTable` copy the content of `create_users_adapt_and_copy_to_migration.rb` and delete it. 
+
+You can run it with `--presist false` if you don't want to persist the user to the local db. 
+
+If you want more than just the uid presisted, change the `user.rb` and override the `aai=` method to do so and the migration to add the columns.
+
+    def aai=(aai)
+      self.email = auth_hash[:info][:email]
+      @aai = aai
+    end
 
 ### Development Mode
 
