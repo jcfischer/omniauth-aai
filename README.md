@@ -1,12 +1,12 @@
 # OmniAuth AAI strategy
 
-OmniAuth Shibboleth AAI strategy is an OmniAuth strategy for authenticating through SWITCHaai. 
+OmniAuth Shibboleth AAI strategy is an OmniAuth strategy for authenticating through SWITCHaai.
 
 - OmniAuth: https://github.com/intridea/omniauth/wiki
 - Shibboleth: https://wiki.shibboleth.net/
 - SWITCHaai: http://www.switch.ch/aai/index.html
 
-Most functionallity is borrwoed from https://github.com/toyokazu/omniauth-shibboleth
+Most functionallity is based on https://github.com/toyokazu/omniauth-shibboleth
 
 ## Getting Started
 
@@ -16,17 +16,32 @@ Install as a gem via Gemfile or with
 
     % gem install omniauth-aai
 
-### Setup SWITCHaai Strategy
 
-To use Shibboleth SWITCHaai strategy as a middleware in your rails application, add the following file to your rails application initializer directory. (There will be a generator soon)
+### Generator
 
+    rails generate aai:install
 
-    # config/initializer/omniauth.rb
-    Rails.application.config.middleware.use OmniAuth::Builder do
-      provider :aai, {}
+This will generate some basic authenthication objects for rails:
+
+* config/omniauth.rb
+* app/controller/session_controller.rb
+* app/models/user.rb
+* db/migrate/create_users_adapt_and_copy_to_migration.rb
+
+You'll need to configure at least the 'db/migrate/create_users_adapt_and_copy_to_migration.rb' file. Just run 'rails g migration createUsersTable' copy the content of 'create_users_adapt_and_copy_to_migration.rb' and delete it.
+
+You can run it with '--persist false' if you don't want to persist the user to the local db.
+
+If you want more than just the uid persisted, change the 'user.rb' and override the 'aai=' method to do so and the migration to add the columns.
+
+    def aai=(aai)
+      self.email = auth_hash[:info][:email]
+      @aai = aai
     end
 
-You will get by default all the standard SWITCHaai values, or you can configure it via options:
+### Additional Shibboleth attributes
+
+By default, you will get all the standard SWITCHaai values, or you can configure it via options:
 
     # config/initializer/omniauth.rb
     Rails.application.config.middleware.use OmniAuth::Builder do
@@ -38,33 +53,13 @@ You will get by default all the standard SWITCHaai values, or you can configure 
 
 Fields are provided in the Env as request.env["omniauth.auth"]["info"]["name"] and extra_fields attributes are provided as ['extra']['raw_info']['Shib-Authentication-Instant'].
 
+
 ### How to authenticate users
 
-In your application, simply direct users to '/auth/aai' to have them sign in via your organizations's AAI SP and IdP. '/auth/aai' url simply redirect users to '/auth/aai/callback', so thus you must protect '/auth/aai/callback' with something like devise.
+Setup your web server to request a valid shibboleth session for the Location/Directory /auth/aai. In your application, send users to '/auth/aai' to have them sign in via the WAYF and your organizations' IdP.  After successful login the user gets redirected to '/auth/aai/callback', from where your application should take over again.
 
 SWITCHaai strategy only checks the existence of Shib-Session-ID or Shib-Application-ID, not anything else. See devise or the genrator for further libraries to authenticate user.
 
-### Generator
-
-    rails generate aai:install
-
-This will generate some basic authenthication objects for rails: 
-
-* config/omniauth.rb
-* app/controller/session_controller.rb
-* app/models/user.rb
-* db/migrate/create_users_adapt_and_copy_to_migration.rb
-
-You'll need to configure at least the `db/migrate/create_users_adapt_and_copy_to_migration.rb` file. Just run `rails g migration createUsersTable` copy the content of `create_users_adapt_and_copy_to_migration.rb` and delete it. 
-
-You can run it with `--presist false` if you don't want to persist the user to the local db. 
-
-If you want more than just the uid presisted, change the `user.rb` and override the `aai=` method to do so and the migration to add the columns.
-
-    def aai=(aai)
-      self.email = auth_hash[:info][:email]
-      @aai = aai
-    end
 
 ### Development Mode
 
@@ -81,7 +76,7 @@ In development / local mode you can use the following mock (with default SWITCHa
 
 ### Debug Mode
 
-When you deploy a new application, you may want to confirm the assumed attributes are correctly provided by SWITCHaai SP. OmniAuth SWITCHaai strategy provides a confirmation option :debug. If you set :debug true, you can see the environment variables provided at the /auth/aai/callback uri.
+When you deploy a new application, you may want to confirm the assumed attributes are correctly provided by SWITCHaai SP. OmniAuth SWITCHaai strategy provides a confirmation option :debug. If you set :debug to true, you can see the environment variables provided at the /auth/aai/callback uri.
 
     # config/initializer/omniauth.rb
     Rails.application.config.middleware.use OmniAuth::Builder do
