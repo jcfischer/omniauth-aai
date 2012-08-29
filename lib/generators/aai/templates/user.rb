@@ -1,7 +1,10 @@
 class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
-  attr_accessible :uid
-
-  attr_accessor :aai
+  <% if options[:persist] %>
+    attr_accessible :uid
+    attr_accessor :aai
+  <% else %>
+    attr_accessor :aai, :uid
+  <% end %>
 
   def name
     aai[:info][:name]
