@@ -12,8 +12,6 @@ class SessionController < ApplicationController
       self.current_user.uid = auth_hash[:info][:uid]
     end
 
-    # SET HERE ADDITIONAL ATTRIBUTES TO PERSIST
-
     self.current_user.aai = auth_hash
 
     flash[:notice] = "Login successful"
