@@ -1,15 +1,13 @@
 class SessionController < ApplicationController
 
   def create
-    auth_hash[:info][:uid] = auth_hash[:info][:email] if Rails.env.development?
+    auth_hash[:uid] = auth_hash[:info][:email] if Rails.env.development?
 
     if User.superclass == ActiveRecord::Base
-      self.current_user = User.find_or_create_by_uid(
-        :uid => auth_hash[:info][:uid]
-      )
+      self.current_user = User.find_or_create_by_uid( auth_hash[:uid] )
     else
       self.current_user = User.new
-      self.current_user.uid = auth_hash[:info][:uid]
+      self.current_user.uid = auth_hash[:uid]
     end
 
     self.current_user.aai = auth_hash
