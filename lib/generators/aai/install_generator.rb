@@ -1,5 +1,10 @@
+require 'rails/generators'
+require 'rails/generators/migration'
+
 module Aai
   class InstallGenerator < Rails::Generators::Base
+    include Rails::Generators::Migration
+
     desc "Generate Config Files / User / Session and Routes"
 
     class_option :persist, :type => :boolean, :default => true, :desc => "Set to false if you don't want persistent User"
@@ -23,7 +28,7 @@ module Aai
 
     def copy_user_file
       template "user.rb", "app/models/user.rb"
-      copy_file "migration.rb", "db/migrate/create_users_adapt_and_copy_to_migration.rb" if options[:persist]
+      migration_template "migration.rb", "db/migrate/create_users_table.rb" if options[:persist]
     end
 
   end
