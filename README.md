@@ -63,15 +63,17 @@ SWITCHaai strategy only checks the existence of Shib-Session-ID or Shib-Applicat
 
 ### Development Mode
 
-In development / local mode you can use the following mock (with default SWITCHaai values):
+In development/local mode or in cases where you don't have a SWITCHaai Service Provider (SP) installed and configured, you can use the following mock (with default SWITCHaai values):
 
     # config/initializer/omniauth.rb
     Rails.application.config.middleware.use OmniAuth::Builder do
-      provider :developer, {
-        :uid_field => :'persistent-id',
-        :fields => OmniAuth::Strategies::Aai::DEFAULT_FIELDS,
-        :extra_fields => OmniAuth::Strategies::Aai::DEFAULT_EXTRA_FIELDS
-      } if Rails.env == 'development'
+      if Rails.env.development?
+        provider :developer, {
+          :uid_field => :'persistent-id',
+          :fields => OmniAuth::Strategies::Aai::DEFAULT_FIELDS,
+          :extra_fields => OmniAuth::Strategies::Aai::DEFAULT_EXTRA_FIELDS
+        }
+      end
     end
 
 ### Debug Mode
