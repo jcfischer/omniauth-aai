@@ -33,16 +33,16 @@ You'll need to configure at least the 'db/migrate/create_users_adapt_and_copy_to
 You can run it with '--persist false' if you don't want to persist the user to the local db.
 
 If you want more than just the uid persisted, change the 'user.rb' and override the 'aai=' method to do so and the migration to add the columns.
-
+```ruby
     def aai=(aai)
       self.email = auth_hash[:info][:email]
       @aai = aai
     end
-
+```
 ### Additional Shibboleth attributes
 
 By default, you will get all the standard SWITCHaai values, or you can configure it via options:
-
+```ruby
     # config/initializer/omniauth.rb
     Rails.application.config.middleware.use OmniAuth::Builder do
       provider :aai,{
@@ -50,7 +50,7 @@ By default, you will get all the standard SWITCHaai values, or you can configure
         :fields => [:name, :email, :swiss_ep_uid],
         :extra_fields => [:'Shib-Authentication-Instant']# See lib/omniauth/strategies/aai.rb for full list.
       }
-
+```
 Fields are provided in the Env as request.env["omniauth.auth"]["info"]["name"] and extra_fields attributes are provided as ['extra']['raw_info']['Shib-Authentication-Instant'].
 
 
