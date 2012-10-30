@@ -1,19 +1,23 @@
 class SessionController < ApplicationController
 
   def create
-    auth_hash[:uid] = auth_hash[:info][:email] if Rails.env.development?
+    #Change to whatever the uid should look like in development
+    #auth_hash[:uid] = auth_hash[:info][:email] if Rails.env.development? 
 
-    if User.superclass == ActiveRecord::Base
-      self.current_user = User.find_or_create_by_uid( auth_hash[:uid] )
-    else
-      self.current_user = User.new
-      self.current_user.uid = auth_hash[:uid]
-    end
-
+  <% if options[:persist] %>
+    #Add  whatever fields you want to save
+    self.current_user = User.find_or_create_by_uid( auth_hash[:uid] )
+    #Auth Hash is not persistent
     self.current_user.aai = auth_hash
+  <% else %>
+    self.current_user = User.new
+    self.current_user.uid = auth_hash[:uid]
+    self.current_user.aai = auth_hash
+  <% end %>
 
     flash[:notice] = "Login successful"
-    redirect_to(session[:return_to] || root_path)
+
+    redirect_to(session.delete( :return_to ) || root_path)
   end
 
   def failure

@@ -11,9 +11,4 @@ class WelcomeControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should get other_protected" do
-    get :other_protected
-    assert_response :success
-  end
-
 end
