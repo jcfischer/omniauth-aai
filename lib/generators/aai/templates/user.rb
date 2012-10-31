@@ -1,12 +1,12 @@
 class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
-  <% if options[:persist] %>
-    attr_accessible :uid
-    attr_accessor :aai
-    PERSISTENT = true
-  <% else %>
-    attr_accessor :aai, :uid
-    PERSISTENT = false
-  <% end %>
+<% if options[:persist] %>
+  attr_accessible :uid
+  attr_accessor :aai
+  PERSISTENT = true
+<% else %>
+  attr_accessor :aai, :uid
+  PERSISTENT = false
+<% end %>
 
   def name
     aai[:info][:name]
@@ -38,7 +38,7 @@ class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
   def marshal
     {
       id: self.uid,
-      aai: aai[:info]
+      aai: aai.present? ? aai[:info] : {}
     }
   end
 
@@ -49,7 +49,7 @@ class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
   end
 
   def unmarshal(session_data)
-    self.id = session_data[:id]
+    self.uid = session_data[:id]
     self.aai = session_data[:aai]
   end
 

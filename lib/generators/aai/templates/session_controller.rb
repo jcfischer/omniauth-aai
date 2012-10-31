@@ -1,8 +1,6 @@
 class SessionController < ApplicationController
 
   def create
-    #Change to whatever the uid should look like in development
-    #auth_hash[:uid] = auth_hash[:info][:email] if Rails.env.development? 
 
   <% if options[:persist] %>
     #Add  whatever fields you want to save
@@ -10,9 +8,10 @@ class SessionController < ApplicationController
     #Auth Hash is not persistent
     self.current_user.aai = auth_hash
   <% else %>
-    self.current_user = User.new
-    self.current_user.uid = auth_hash[:uid]
-    self.current_user.aai = auth_hash
+    user = User.new
+    user.uid = auth_hash[:uid]
+    user.aai = auth_hash
+    self.current_user = user
   <% end %>
 
     flash[:notice] = "Login successful"

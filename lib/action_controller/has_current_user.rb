@@ -6,18 +6,16 @@ module HasCurrentUser
   module InstanceMethods
     @user = nil
 
-    def current_user() 
-      if @user.present? || session[:current_user].present?
-        @user || User.unmarshal( session[:current_user] ) 
-      else
-        return nil
-      end
+    def current_user
+      return nil unless @user.present? || session[:current_user].present?
+      @user = @user || User.unmarshal( session[:current_user] ) 
+      @user
     end
 
     # Set the current user
     def current_user=(user) 
       @user = user
-      session[:current_user] = @user.marshal if @user.present?
+      session[:current_user] = @user.marshal unless @user.nil?
     end
     
     # Authenticate User
@@ -33,7 +31,7 @@ module HasCurrentUser
     
     # User authenticated?
     def authenticated?
-      return true if self.current_user
+      return true if self.current_user.present? && self.current_user.uid.present?
       return false
     end
   end
