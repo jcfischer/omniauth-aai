@@ -93,6 +93,18 @@ When you deploy a new application, you may want to confirm the assumed attribute
     end
 ```
 
+### Current User
+
+If you want to use the build in User object and the 'current_user' functionality, you can use the magic call 'has_current_user'
+
+```ruby
+    class ApplicationController < ActionController::Base
+      protect_from_forgery
+      has_current_user
+    end
+```
+
+
 ## License (MIT License)
 
 Copyright (C) SWITCH, Zurich, original copyright (omniauth-shibboleth) 2011 by Toyokazu Akiyama.
