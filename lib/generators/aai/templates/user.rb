@@ -55,7 +55,7 @@ class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
 
  <% end %>
 
-  #def ship_session_id
+  #def shib_session_id
   #  aai["extra"]["raw_info"]['Shib-Session-ID']
   #end
   #
