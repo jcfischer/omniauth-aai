@@ -5,19 +5,26 @@ module OmniAuth
 
       # 8 core attributes, which must be available for all users
       CORE_ATTRIBUTES = {
-        swiss_ep_uid:          [:'Shib-SwissEP-UniqueID'], 
-        first_name:            [:'Shib-InetOrgPerson-givenName'], 
-        surname:               [:'Shib-Person-surname'], 
-        mail:                  [:'Shib-InetOrgPerson-mail'],
-        homeOrganization:      [:'Shib-SwissEP-HomeOrganization'], 
-        homeOrganizationType:  [:'Shib-SwissEP-HomeOrganizationType'], 
-        affiliation:           [:'Shib-EP-Affiliation']
+        swiss_ep_uid:          [:'uniqueID'],
+        surname:               [:'surname'],
+        first_name:            [:'givenName'],
+        mail:                  [:'mail'],
+        homeOrganization:      [:'homeOrganization'],
+        homeOrganizationType:  [:'homeOrganizationType'],
+        affiliation:           [:'affiliation']
+        # swiss_ep_uid:          [:'Shib-SwissEP-UniqueID'],
+        # first_name:            [:'Shib-InetOrgPerson-givenName'],
+        # surname:               [:'Shib-Person-surname'],
+        # mail:                  [:'Shib-InetOrgPerson-mail'],
+        # homeOrganization:      [:'Shib-SwissEP-HomeOrganization'],
+        # homeOrganizationType:  [:'Shib-SwissEP-HomeOrganizationType'],
+        # affiliation:           [:'Shib-EP-Affiliation']
       }
 
       # 8 or more Shibboleth attributes, set by the Service Provider automatically if a user has a valid session
-      SHIBBOLETH_ATTRIBUTES = { 
-        :entitlement => [:'Shib-EP-Entitlement'],
-        :preferredLanguage => [:'Shib-InetOrgPerson-preferredLanguage'],
+      SHIBBOLETH_ATTRIBUTES = {
+        :entitlement => [:'entitlement'],
+        :preferredLanguage => [:'preferredLanguage'],
         :'Shib-Application-ID' => [],
         :'Shib-Assertion-01' => [],
         :'Shib-Assertion-Count' => [],
@@ -26,6 +33,16 @@ module OmniAuth
         :'Shib-AuthnContext-Class' => [],
         :'Shib-Identity-Provider' => [],
         :'Shib-Session-ID' => []
+        # :entitlement => [:'Shib-EP-Entitlement'],
+        # :preferredLanguage => [:'Shib-InetOrgPerson-preferredLanguage'],
+        # :'Shib-Application-ID' => [],
+        # :'Shib-Assertion-01' => [],
+        # :'Shib-Assertion-Count' => [],
+        # :'Shib-Authentication-Instant' => [],
+        # :'Shib-Authentication-Method' => [],
+        # :'Shib-AuthnContext-Class' => [],
+        # :'Shib-Identity-Provider' => [],
+        # :'Shib-Session-ID' => []
       }
 
       DEFAULT_EXTRA_FIELDS = (CORE_ATTRIBUTES.keys + SHIBBOLETH_ATTRIBUTES.keys)
@@ -53,15 +70,15 @@ module OmniAuth
       def read_env( attribute_key )
         ([attribute_key] + (aai_attributes[attribute_key] || [])).each do | a |
           v = request.env[a.to_s]
-          return v unless v.nil? || v.strip == "" 
+          return v unless v.nil? || v.strip == ""
         end
       end
 
       # # # # #
-      # Rack 
+      # Rack
       # # # # #
       def request_phase
-        [ 
+        [
           302,
           {
             'Location' => script_name + callback_path + query_string,
@@ -74,10 +91,10 @@ module OmniAuth
       def callback_phase
         super
       end
-      
+
       uid do
         # persistent-id is default uid
-        request.env[options.uid_field.to_s] 
+        request.env[options.uid_field.to_s]
       end
 
       info do

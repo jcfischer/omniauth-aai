@@ -49,7 +49,7 @@ describe OmniAuth::Strategies::Aai do
 
     context 'with Shibboleth session' do
       let(:strategy){ OmniAuth::Strategies::Aai.new(app, {}) }
-  
+
       it 'should set default omniauth.auth fields' do
         @dummy_id = 'abcdefg'
         @uid = 'https://aai-logon.vho-switchaai.ch/idp/shibboleth!https://aai-viewer.switch.ch/shibboleth!lYQnHiuZjROvtykBpZHjy1UaZPg='
@@ -57,7 +57,7 @@ describe OmniAuth::Strategies::Aai do
         @first_name = 'Vorname'
         @email = 'test@example.com'
         @shibboleth_unique_id = '099886@vho-switchaai.ch'
-        strategy.call!(make_env('/auth/aai/callback', 'Shib-Session-ID' => @dummy_id, 'persistent-id' => @uid, 'surname' => @last_name, 'first_name' => @first_name, 'mail' => @email, 'Shib-SwissEP-UniqueID' => @shibboleth_unique_id))
+        strategy.call!(make_env('/auth/aai/callback', 'Shib-Session-ID' => @dummy_id, 'persistent-id' => @uid, 'surname' => @last_name, 'first_name' => @first_name, 'mail' => @email, 'uniqueID' => @shibboleth_unique_id))
         strategy.env['omniauth.auth']['uid'].should == @uid
         strategy.env['omniauth.auth']['info']['name'].should == "#{@first_name} #{@last_name}"
         strategy.env['omniauth.auth']['info']['email'].should == @email
