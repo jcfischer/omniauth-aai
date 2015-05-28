@@ -1,18 +1,21 @@
 class SessionController < ApplicationController
 
+  skip_before_filter :verify_authenticity_token, only: :create, if: Rails.env.development?
+
   def create
 
-  <% if options[:persist] %>
+  <%- if options[:persist] %>
     #Add  whatever fields you want to save
-    self.current_user = User.find_or_create_by_uid( auth_hash[:uid] )
+    self.current_user = User.where(uid: auth_hash[:uid]).first_or_create
+    # self.current_user = User.find_or_create_by_uid( auth_hash[:uid] )
     #Auth Hash is not persistent
     self.current_user.aai = auth_hash
-  <% else %>
+  <%- else %>
     user = User.new
     user.uid = auth_hash[:uid]
     user.aai = auth_hash
     self.current_user = user
-  <% end %>
+  <%- end %>
 
     flash[:notice] = "Login successful"
 
@@ -30,11 +33,25 @@ class SessionController < ApplicationController
     redirect_to(root_path)
   end
 
+  # protected
 
-  protected
+  # def auth_hash
+  #   request.env['omniauth.auth']
+  # end
+
+  private
 
   def auth_hash
     request.env['omniauth.auth']
   end
-  
+
+  # def user_params
+  #   user_params = auth_hash
+  #   user_params ? user_params
+  #     .permit(
+  #       :uid
+  #     ) : {}
+  # end
+
+
 end
