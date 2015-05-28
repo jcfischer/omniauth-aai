@@ -3,5 +3,5 @@ TestApp1::Application.routes.draw do
 
   get "welcome/protected"
 
-  root :to => 'welcome#index'
+  root to: 'welcome#index'
 end
