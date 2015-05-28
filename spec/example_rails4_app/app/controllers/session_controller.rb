@@ -4,13 +4,13 @@ class SessionController < ApplicationController
 
   def create
 
-    #Add  whatever fields you want to save
-    self.current_user = User.where(uid: auth_hash[:uid]).first_or_create
-    # self.current_user = User.find_or_create_by_uid( auth_hash[:uid] )
 
+    #Add  whatever fields you want to save
+    self.current_user = User.where(uid: auth_hash[:uid]).first_or_initialize
+    # self.current_user = User.find_or_create_by_uid( auth_hash[:uid] )
     #Auth Hash is not persistent
-    self.current_user.aai = user_params
-    # self.current_user.aai = auth_hash
+    self.current_user.raw_data = auth_hash
+    self.current_user.save
 
 
     flash[:notice] = "Login successful"
@@ -31,7 +31,15 @@ class SessionController < ApplicationController
 
   # protected
 
+  # def auth_hash
+  #   request.env['omniauth.auth']
+  # end
+
   private
+
+  def auth_hash
+    request.env['omniauth.auth']
+  end
 
   # def user_params
   #   user_params = auth_hash
@@ -40,10 +48,6 @@ class SessionController < ApplicationController
   #       :uid
   #     ) : {}
   # end
-
-  def auth_hash
-    request.env['omniauth.auth']
-  end
 
 
 end
