@@ -20,9 +20,9 @@ module Aai
     def copy_session_controller_file
       if true
         template "session_controller.rb", "app/controllers/session_controller.rb"
-        route("match '/auth/:provider/callback', :to => 'session#create', :as => 'auth_callback'")
-        route("match '/auth/failure', :to => 'session#failure', :as => 'auth_failure'")
-        route("match '/auth/logout',  :to => 'session#destroy', :as => 'logout'")
+        route("post '/auth/:provider/callback', :to => 'session#create', :as => 'auth_callback'")
+        route("get '/auth/failure', :to => 'session#failure', :as => 'auth_failure'")
+        route("get '/auth/logout',  :to => 'session#destroy', :as => 'logout'")
       end
     end
 
