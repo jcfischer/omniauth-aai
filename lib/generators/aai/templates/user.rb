@@ -1,6 +1,6 @@
 class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
 <% if options[:persist] %>
-  attr_accessible :uid
+  # attr_accessible :uid
   attr_accessor :aai
   PERSISTENT = true
 <% else %>

@@ -3,7 +3,7 @@ class AaiCreateUser < ActiveRecord::Migration
 
     create_table(:users) do |t|
       t.string :uid
-      t.text :raw_data
+      t.string :raw_data
       t.timestamps
     end
 
