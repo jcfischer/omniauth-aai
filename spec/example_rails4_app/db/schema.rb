@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150528082848) do
+ActiveRecord::Schema.define(version: 20150528142303) do
 
   create_table "users", force: :cascade do |t|
     t.string   "uid"
+    t.string   "raw_data"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
