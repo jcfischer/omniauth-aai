@@ -19,7 +19,7 @@ end
 
 describe OmniAuth::Strategies::Aai do
   let(:app){ Rack::Builder.new do |b|
-    b.use Rack::Session::Cookie
+    b.use Rack::Session::Cookie, {secret: "abc123"}
     b.use OmniAuth::Strategies::Aai
     b.run lambda{|env| [200, {}, ['Not Found']]}
   end.to_app }
