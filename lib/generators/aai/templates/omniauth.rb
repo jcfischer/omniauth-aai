@@ -2,6 +2,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   if Rails.env.development?
     provider :developer, {
       uid_field: :'persistent-id' #:'persistent-id', :swiss_ep_uid
+      fields: [:name, :email, :'persistent-id', :'givenName', :surname, :'homeOrganization']
       # info_fields: OmniAuth::Strategies::Aai::DEFAULT_FIELDS,
       # extra_fields: OmniAuth::Strategies::Aai::DEFAULT_EXTRA_FIELDS
     }
