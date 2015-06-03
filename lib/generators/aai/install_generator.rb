@@ -31,11 +31,10 @@ module Aai
       migration_template "migration.rb", "db/migrate/aai_create_user.rb" if options[:persist]
     end
 
-
-    def self.next_migration_number(dirname)
-      orm = Rails.configuration.generators.options[:rails][:orm]
-      require "rails/generators/#{orm}"
-      "#{orm.to_s.camelize}::Generators::Base".constantize.next_migration_number(dirname)
-    end
+    # def self.next_migration_number(dirname)
+    #   orm = Rails.configuration.generators.options[:rails][:orm]
+    #   require "rails/generators/#{orm}"
+    #   "#{orm.to_s.camelize}::Generators::Base".constantize.next_migration_number(dirname)
+    # end
   end
 end
