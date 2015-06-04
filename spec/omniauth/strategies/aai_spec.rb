@@ -13,7 +13,7 @@ def failure_path
   if OmniAuth::VERSION >= "1.0" && OmniAuth::VERSION < "1.1"
     "/auth/failure?message=no_aai_session"
   elsif OmniAuth::VERSION >= "1.1"
-    "/auth/failure?message=no_aai_session&strategy=aai"
+    "/auth/failure?message=no_shibboleth_session&strategy=aai"
   end
 end
 
@@ -94,7 +94,7 @@ describe OmniAuth::Strategies::Aai do
 
       context 'extra fields' do
         it 'is expected to set the home_organization field' do
-          expect(strategy.env['omniauth.auth']['extra']['raw_info']["home_organization"]).to eq(@home)
+          expect(strategy.env['omniauth.auth']['info']["home_organization"]).to eq(@home)
         end
       end
 
@@ -125,9 +125,9 @@ describe OmniAuth::Strategies::Aai do
       it 'can handle empty core attributes' do
         @dummy_id = 'abcdefg'
         @uid = 'test'
-        @home = ''
+        @home = nil
         strategy.call!(make_env('/auth/aai/callback', 'Shib-Session-ID' => @dummy_id, 'uniqueID' => @uid, 'Shib-Authentication-Instant' => @instant, 'homeOrganization' => @home))
-        expect(strategy.env['omniauth.auth']['extra']['raw_info']['homeOrganization']).to eq(@home)
+        expect(strategy.env['omniauth.auth']['info']['homeOrganization']).to eq(@home)
       end
     end
 
