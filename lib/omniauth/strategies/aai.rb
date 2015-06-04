@@ -22,7 +22,7 @@ module OmniAuth
 
       # # 8 core attributes, which must be available for all users
       # CORE_ATTRIBUTES = {
-      #   swiss_ep_uid:          [:'uniqueID'],
+      #   unique_id:          [:'uniqueID'],
       #   # persistent_id:         [:'persistent-id'],
       #   surname:               [:'surname'],
       #   first_name:            [:'givenName'],
@@ -30,7 +30,7 @@ module OmniAuth
       #   homeOrganization:      [:'homeOrganization'],
       #   homeOrganizationType:  [:'homeOrganizationType'],
       #   affiliation:           [:'affiliation']
-      #   # swiss_ep_uid:          [:'Shib-SwissEP-UniqueID'],
+      #   # unique_id:          [:'Shib-SwissEP-UniqueID'],
       #   # first_name:            [:'Shib-InetOrgPerson-givenName'],
       #   # surname:               [:'Shib-Person-surname'],
       #   # mail:                  [:'Shib-InetOrgPerson-mail'],
@@ -63,7 +63,7 @@ module OmniAuth
       #   # :'Shib-Session-ID' => []
       # }
 
-      # DEFAULT_FIELDS = [:name, :email, :swiss_ep_uid ]
+      DEFAULT_FIELDS = [:name, :email, :'persistent-id']
       # DEFAULT_EXTRA_FIELDS = (CORE_ATTRIBUTES.keys + SHIBBOLETH_ATTRIBUTES.keys)
 
       # option :fields, DEFAULT_FIELDS

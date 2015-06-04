@@ -50,7 +50,7 @@ By default, you will get all the standard SWITCHaai values, or you can configure
     Rails.application.config.middleware.use OmniAuth::Builder do
       provider :aai,{
         :uid_field => :'persistent-id',
-        :fields => [:name, :email, :swiss_ep_uid],
+        :fields => [:name, :email, :unique_id],
         :extra_fields => [:'Shib-Authentication-Instant']# See lib/omniauth/strategies/aai.rb for full list.
       }
 ```
