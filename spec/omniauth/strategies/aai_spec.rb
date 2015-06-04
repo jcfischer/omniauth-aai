@@ -69,7 +69,8 @@ describe OmniAuth::Strategies::Aai do
         @display_name = "#{@first_name} #{@last_name}"
         @email = 'test@example.com'
         @shibboleth_unique_id = '099886@vho-switchaai.ch'
-        env = make_env('/auth/aai/callback', 'Shib-Session-ID' => @dummy_id, 'persistent-id' => @uid, 'surname' => @last_name, 'first_name' => @first_name, 'displayName' => @display_name, 'mail' => @email, 'uniqueID' => @shibboleth_unique_id)
+        @home = 'switch.ch'
+        env = make_env('/auth/aai/callback', 'Shib-Session-ID' => @dummy_id, 'persistent-id' => @uid, 'surname' => @last_name, 'first_name' => @first_name, 'displayName' => @display_name, 'mail' => @email, 'uniqueID' => @shibboleth_unique_id, 'homeOrganization' => @home)
         response = strategy.call!(env)
       end
 
@@ -91,13 +92,22 @@ describe OmniAuth::Strategies::Aai do
         end
       end
 
-      # it 'should set default omniauth.auth fields' do
-      #   expect(strategy.env['omniauth.auth']['info']['swiss_ep_uid']).to eq(@shibboleth_unique_id)
-      # end
+      context 'extra fields' do
+        it 'is expected to set the home_organization field' do
+          expect(strategy.env['omniauth.auth']['extra']['raw_info']["home_organization"]).to eq(@home)
+        end
+      end
+
     end
 
     context 'with Shibboleth session and attribute options' do
-      let(:options){ { :uid_field => :uniqueID, :fields => [], :extra_fields => [:"Shib-Authentication-Instant", :homeOrganization] } }
+      let(:options){
+        {
+          uid_field: :uniqueID,
+          fields: [],
+          extra_fields: [:"Shib-Authentication-Instant", :homeOrganization]
+        }
+      }
       let(:app){ lambda{|env| [404, {}, ['Awesome']]}}
       let(:strategy){ OmniAuth::Strategies::Aai.new(app, options) }
 
@@ -112,14 +122,13 @@ describe OmniAuth::Strategies::Aai do
         expect(strategy.env['omniauth.auth']['extra']['raw_info']['homeOrganization']).to eq(@home)
       end
 
-      # it 'can handle empty core attributes' do
-      #   @dummy_id = 'abcdefg'
-      #   @uid = 'test'
-      #   @home = ''
-      #   @instant = '2012-07-04T14:08:18.999Z'
-      #   strategy.call!(make_env('/auth/aai/callback', 'Shib-Session-ID' => @dummy_id, 'uniqueID' => @uid, 'Shib-Authentication-Instant' => @instant, 'homeOrganization' => @home))
-      #   expect(strategy.env['omniauth.auth']['extra']['raw_info']['homeOrganization']).to eq(@home)
-      # end
+      it 'can handle empty core attributes' do
+        @dummy_id = 'abcdefg'
+        @uid = 'test'
+        @home = ''
+        strategy.call!(make_env('/auth/aai/callback', 'Shib-Session-ID' => @dummy_id, 'uniqueID' => @uid, 'Shib-Authentication-Instant' => @instant, 'homeOrganization' => @home))
+        expect(strategy.env['omniauth.auth']['extra']['raw_info']['homeOrganization']).to eq(@home)
+      end
     end
 
     context 'with debug options' do
