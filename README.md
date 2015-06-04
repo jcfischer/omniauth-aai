@@ -74,9 +74,9 @@ In development/local mode or in cases where you don't have a SWITCHaai Service P
     Rails.application.config.middleware.use OmniAuth::Builder do
       if Rails.env.development?
         provider :developer, {
-          :uid_field => :'persistent-id',
-          :fields => OmniAuth::Strategies::Aai::DEFAULT_FIELDS,
-          :extra_fields => OmniAuth::Strategies::Aai::DEFAULT_EXTRA_FIELDS
+          uid_field: :'persistent-id',
+          fields: [:name, :email, :persistent_id, :unique_id],
+          extra_fields: OmniAuth::Strategies::Aai::DEFAULT_EXTRA_FIELDS
         }
       end
     end
