@@ -30,25 +30,10 @@ class SessionController < ApplicationController
     redirect_to(root_path)
   end
 
-  # protected
-
-  # def auth_hash
-  #   request.env['omniauth.auth']
-  # end
-
   private
 
   def auth_hash
     request.env['omniauth.auth']
   end
-
-  # def user_params
-  #   user_params = auth_hash
-  #   user_params ? user_params
-  #     .permit(
-  #       :uid
-  #     ) : {}
-  # end
-
 
 end
