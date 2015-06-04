@@ -15,11 +15,19 @@ ActiveRecord::Schema.define(version: 20150528142303) do
 
   create_table "users", force: :cascade do |t|
     t.string   "uid"
-    t.string   "raw_data"
+    t.string   "unique_id"
+    t.string   "persistent_id"
+    t.string   "email"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "home_organization"
+    t.text     "raw_data"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "users", ["persistent_id"], name: "index_users_on_persistent_id", unique: true
   add_index "users", ["uid"], name: "index_users_on_uid", unique: true
+  add_index "users", ["unique_id"], name: "index_users_on_unique_id", unique: true
 
 end
