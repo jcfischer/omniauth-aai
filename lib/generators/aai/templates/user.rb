@@ -1,11 +1,30 @@
 class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
 <% if options[:persist] %>
+
   # attr_accessible :uid
   attr_accessor :aai
   PERSISTENT = true
+
+  def update_or_create_with_omniauth_aai(omniauth_aai)
+    user = find_or_build_with_uid(omniauth_aai['uid'])
+    user.raw_data = omniauth_aai.respond_to?(:to_hash) ? omniauth_aai.to_hash : omniauth_aai.inspect
+    user.save
+    user
+  end
+
+  def find_or_build_with_uid(aai_uid)
+    if aai_uid.present?
+      where(uid: aai_uid).first || new(uid: aai_uid)
+    else
+      new
+    end
+  end
+
 <% else %>
+
   attr_accessor :aai, :uid
   PERSISTENT = false
+
 <% end %>
 
   def name
@@ -19,6 +38,7 @@ class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
   rescue
     nil
   end
+
 
 <% if options[:persist] %>
 
