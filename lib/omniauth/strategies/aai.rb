@@ -1,17 +1,21 @@
 require 'omniauth-shibboleth'
 module OmniAuth
   module Strategies
-    class Aai
-      include OmniAuth::Strategy
+    class Aai < OmniAuth::Strategies::Shibboleth
+      # include OmniAuth::Strategy
+
+
+      DEFAULT_FIELDS = [:name, :email, :'persistent-id']
+
 
       # Attributes checked to find out if there is a valid shibboleth session
       option :shib_session_id_field, 'Shib-Session-ID'
       option :shib_application_id_field, 'Shib-Application-ID'
 
-      # persistent-id is default uid. Alternative: uniqueID
       option :uid_field, 'persistent-id'
       option :name_field, 'displayName'
       option :email_field, 'mail'
+      option :fields, DEFAULT_FIELDS
       option :info_fields, {}
       option :extra_fields, []
 
@@ -63,10 +67,8 @@ module OmniAuth
       #   # :'Shib-Session-ID' => []
       # }
 
-      DEFAULT_FIELDS = [:name, :email, :'persistent-id']
       # DEFAULT_EXTRA_FIELDS = (CORE_ATTRIBUTES.keys + SHIBBOLETH_ATTRIBUTES.keys)
 
-      # option :fields, DEFAULT_FIELDS
       # option :extra_fields, DEFAULT_EXTRA_FIELDS
       # option :aai_fields, CORE_ATTRIBUTES
       # option :aai_extra_fields, SHIBBOLETH_ATTRIBUTES

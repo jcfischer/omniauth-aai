@@ -2,8 +2,8 @@
 require File.expand_path('../lib/omniauth-aai/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  # gem.add_dependency 'omniauth-shibboleth'
-  gem.add_dependency 'omniauth'
+  gem.add_dependency 'omniauth-shibboleth'
+  # gem.add_dependency 'omniauth'
 
   gem.add_development_dependency 'rack-test'
   gem.add_development_dependency 'rake'
