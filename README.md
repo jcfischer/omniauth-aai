@@ -95,12 +95,12 @@ When you deploy a new application, you may want to confirm the assumed attribute
 
 ### Current User
 
-If you want to use the build in User object and the 'current_user' functionality, you can use the magic call 'has_current_user'
+If you want to use the build in User object and the 'current_user' functionality, you can include the HasCurrentUser concern in the ApplicationController
 
 ```ruby
     class ApplicationController < ActionController::Base
       protect_from_forgery
-      has_current_user
+      include Omniauth::HasCurrentUser
     end
 ```
 
