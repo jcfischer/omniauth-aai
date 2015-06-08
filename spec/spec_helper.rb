@@ -1,15 +1,17 @@
-require 'rspec'
-require 'rack/test'
-require 'omniauth'
-require 'omniauth/version'
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'omniauth-aai'
-require 'support/omniauth_macros'
+
+require 'rack/test'
+# require 'rspec'
+# require 'omniauth'
+# require 'omniauth/has_current_user'
+# require 'omniauth-aai'
+# require 'omniauth/version'
+# require 'support/omniauth_macros'
 
 RSpec.configure do |config|
-    config.include(OmniauthMacros)
-
+    # config.include(OmniauthMacros)
     config.include Rack::Test::Methods
-    config.color = true
 end
 
 # OmniAuth.config.test_mode = true
