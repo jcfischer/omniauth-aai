@@ -1,13 +1,13 @@
 require 'rails/generators'
-require 'rails/generators/migration'
+require "rails/generators/active_record"
 
 module Aai
-  class InstallGenerator < Rails::Generators::Base
-    include Rails::Generators::Migration
+  class InstallGenerator < ActiveRecord::Generators::Base
+    # include Rails::Generators::Migration
 
     desc "Generate Config Files / User / Session and Routes"
 
-    class_option :persist, :type => :boolean, :default => true, :desc => "Set to false if you don't want persistent User"
+    class_option :persist, type: :boolean, default: true, desc: "Set to false if you don't want persistent User"
 
     def self.source_root
       @source_root ||= File.join(File.dirname(__FILE__), 'templates')
