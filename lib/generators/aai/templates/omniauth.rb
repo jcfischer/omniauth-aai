@@ -17,6 +17,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
         home_organization:    "homeOrganization",
         preferred_language:   "preferredLanguage",
         affiliation:          "affiliation"
+      }
     }
   end
 end
