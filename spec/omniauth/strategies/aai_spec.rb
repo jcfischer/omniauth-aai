@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'omniauth/version'
+
 
 def make_env(path = '/auth/aai', props = {})
   {
