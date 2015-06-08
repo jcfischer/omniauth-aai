@@ -1,10 +1,21 @@
-module OmniauthAai
+require 'active_support/concern'
+
+module Omniauth
   module HasCurrentUser
-    def has_current_user
-      helper_method :current_user
-      include InstanceMethods
+    extend ActiveSupport::Concern
+
+    included do
     end
-    module InstanceMethods
+
+    module ClassMethods
+      def has_current_user
+        helper_method :current_user
+        include Omniauth::HasCurrentUser::LocalInstanceMethods
+      end
+    end
+
+
+    module LocalInstanceMethods
       @user = nil
 
       def current_user
@@ -36,6 +47,7 @@ module OmniauthAai
         return false
       end
     end
+
   end
 
   begin
