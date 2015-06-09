@@ -95,34 +95,11 @@ When you deploy a new application, you may want to confirm the assumed attribute
 
 ### Current User
 
-If you want to use the build in User object and the 'current_user' functionality, you can include the HasCurrentUser concern in the ApplicationController
+If you want to use the build in User object and the 'current_user' functionality, you can include the has_current_user method to concerned ActionController or the ApplicationController if you want to have the functionality available globally.
 
 ```ruby
     class ApplicationController < ActionController::Base
       protect_from_forgery
-      include Omniauth::HasCurrentUser
+      has_current_user
     end
 ```
-
-
-## License (MIT License)
-
-Copyright (C) SWITCH, Zurich, original copyright (omniauth-shibboleth) 2011 by Toyokazu Akiyama.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
