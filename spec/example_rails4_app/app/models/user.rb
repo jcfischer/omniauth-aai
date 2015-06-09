@@ -5,12 +5,7 @@ class User < ActiveRecord::Base
   PERSISTENT = true
 
   def self.update_or_create_with_omniauth_aai(omniauth_aai)
-    user = find_or_build_with_uid(omniauth_aai.uid)
-    # if omniauth_aai['extra'] && (aai_extra = omniauth_aai['extra']['raw_info'])
-    #   attributes.merge!(
-    #     first_name = omniauth_aai['givenName']
-    #   )
-    # end
+    user = find_or_build_with_uid(omniauth_aai['uid'])
     user.attributes = {
       unique_id:          omniauth_aai.info.unique_id,
       persistent_id:      omniauth_aai.info.persistent_id,
@@ -21,9 +16,6 @@ class User < ActiveRecord::Base
       # affiliation: omniauth_aai.info.affiliation,
       raw_data:           omniauth_aai.respond_to?(:to_hash) ? omniauth_aai.to_hash : omniauth_aai.inspect
     }
-
-    # user.unique_id = omniauth_aai['uniqueID']
-
     user.save
     user
   end
@@ -49,6 +41,7 @@ class User < ActiveRecord::Base
     nil
   end
 
+
   def marshal
     self.uid
   end
@@ -61,8 +54,4 @@ class User < ActiveRecord::Base
     self.reload
   end
 
-  #def shib_session_id
-  #  aai["extra"]["raw_info"]['Shib-Session-ID']
-  #end
-  #
 end

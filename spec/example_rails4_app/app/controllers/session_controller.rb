@@ -4,15 +4,14 @@ class SessionController < ApplicationController
 
   def create
 
+  <% if options[:persist] %>
     self.current_user = User.update_or_create_with_omniauth_aai(auth_hash)
-
-    # #Add  whatever fields you want to save
-    # self.current_user = User.where(uid: auth_hash[:uid]).first_or_initialize
-    # # self.current_user = User.find_or_create_by_uid( auth_hash[:uid] )
-    # #Auth Hash is not persistent
-    # self.current_user.raw_data = auth_hash
-    # self.current_user.save
-
+  <% else %>
+    user = User.new
+    user.uid = auth_hash[:uid]
+    user.aai = auth_hash
+    self.current_user = user
+  <% end %>
 
     flash[:notice] = "Login successful"
 
