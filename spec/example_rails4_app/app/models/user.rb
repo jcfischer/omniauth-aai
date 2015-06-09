@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-
   # attr_accessible :uid
   attr_accessor :aai
   PERSISTENT = true
@@ -28,7 +27,6 @@ class User < ActiveRecord::Base
     end
   end
 
-
   def name
     aai[:info][:name]
   rescue
@@ -41,7 +39,6 @@ class User < ActiveRecord::Base
     nil
   end
 
-
   def marshal
     self.uid
   end
@@ -53,5 +50,4 @@ class User < ActiveRecord::Base
   def unmarshal(session_data)
     self.reload
   end
-
 end
