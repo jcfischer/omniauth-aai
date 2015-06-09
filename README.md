@@ -19,16 +19,14 @@ Install as a gem via Gemfile or with
 
 ### Generator
 
-    rails generate aai:install
+    rails generate aai:setup
 
 This will generate some basic authenthication objects for rails:
 
-* config/omniauth.rb
+* config/initializers/omniauth.rb
 * app/controller/session_controller.rb
 * app/models/user.rb
-* db/migrate/create_users_adapt_and_copy_to_migration.rb
-
-You'll need to configure at least the 'db/migrate/create_users_adapt_and_copy_to_migration.rb' file. Just run 'rails g migration createUsersTable' copy the content of 'create_users_adapt_and_copy_to_migration.rb' and delete it.
+* db/migrate/create_aai_user.rb
 
 You can run it with '--persist false' if you don't want to persist the user to the local db.
 
