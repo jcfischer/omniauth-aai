@@ -3,15 +3,14 @@ class SessionController < ApplicationController
   skip_before_filter :verify_authenticity_token, only: :create, if: Rails.env.development?
 
   def create
-
-  <% if options[:persist] %>
+<% if options[:persist] -%>
     self.current_user = User.update_or_create_with_omniauth_aai(auth_hash)
-  <% else %>
+<% else -%>
     user = User.new
     user.uid = auth_hash[:uid]
     user.aai = auth_hash
     self.current_user = user
-  <% end %>
+<% end -%>
 
     flash[:notice] = "Login successful"
 

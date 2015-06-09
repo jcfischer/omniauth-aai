@@ -26,34 +26,24 @@ This will generate some basic authenthication objects for rails:
 * config/initializers/omniauth.rb
 * app/controller/session_controller.rb
 * app/models/user.rb
-* db/migrate/create_aai_user.rb
+* db/migrate/<timestamp>_create_aai_user.rb
 
 You can run it with '--persist false' if you don't want to persist the user to the local db.
 
-If you want more than just the uid persisted, change the 'user.rb' and override the 'aai=' method to do so and the migration to add the columns.
-
-```ruby
-    def aai=(aai)
-      self.email = auth_hash[:info][:email]
-      @aai = aai
-    end
-```
-
 ### Additional Shibboleth attributes
 
-By default, you will get all the standard SWITCHaai values, or you can configure it via options:
+By default, you will get all the core SWITCHaai values, or you can configure it via options:
 
 ```ruby
     # config/initializer/omniauth.rb
     Rails.application.config.middleware.use OmniAuth::Builder do
       provider :aai,{
         :uid_field => :'persistent-id',
-        :fields => [:name, :email, :unique_id],
         :extra_fields => [:'Shib-Authentication-Instant']# See lib/omniauth/strategies/aai.rb for full list.
       }
 ```
 
-Fields are provided in the Env as request.env["omniauth.auth"]["info"]["name"] and extra_fields attributes are provided as ['extra']['raw_info']['Shib-Authentication-Instant'].
+Fields are provided in the Env as request.env["omniauth.auth"]["info"]["name"] (or auth_hash.info.unique_id) and extra_fields attributes are provided as request.env["omniauth.auth"]['extra']['raw_info']['Shib-Authentication-Instant'].
 
 
 ### How to authenticate users
@@ -93,11 +83,11 @@ When you deploy a new application, you may want to confirm the assumed attribute
 
 ### Current User
 
-If you want to use the build in User object and the 'current_user' functionality, you can include the has_current_user method to concerned ActionController or the ApplicationController if you want to have the functionality available globally.
+In order for you to use the build in User object and the 'current_user' functionality, the has_current_user method has been added to the ApplicationController during the setup.
 
 ```ruby
     class ApplicationController < ActionController::Base
-      protect_from_forgery
       has_current_user
+      protect_from_forgery
     end
 ```

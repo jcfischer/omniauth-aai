@@ -1,5 +1,5 @@
 class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
-<% if options[:persist] %>
+<% if options[:persist] -%>
   # attr_accessible :uid
   attr_accessor :aai
   PERSISTENT = true
@@ -27,10 +27,10 @@ class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
       new
     end
   end
-<% else %>
+<% else -%>
   attr_accessor :aai, :uid
   PERSISTENT = false
-<% end %>
+<% end -%>
 
   def name
     aai[:info][:name]
@@ -44,7 +44,7 @@ class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
     nil
   end
 
-<% if options[:persist] %>
+<% if options[:persist] -%>
   def marshal
     self.uid
   end
@@ -56,7 +56,7 @@ class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
   def unmarshal(session_data)
     self.reload
   end
-<% else %>
+<% else -%>
   def marshal
     {
       id: self.uid,
@@ -74,5 +74,5 @@ class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
     self.uid = session_data[:id]
     self.aai = session_data[:aai]
   end
- <% end %>
+<% end -%>
 end
