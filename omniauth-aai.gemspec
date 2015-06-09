@@ -14,15 +14,15 @@ Gem::Specification.new do |gem|
   gem.license       = "MIT"
 
 
-  gem.add_dependency 'omniauth-shibboleth'
+  gem.add_dependency 'omniauth-shibboleth', '~> 1.2'
   # gem.add_dependency 'omniauth'
 
-  gem.add_development_dependency 'rack-test'
-  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rack-test', '~> 0.6'
+  gem.add_development_dependency 'rake', '~> 10.4'
   gem.add_development_dependency 'rspec', '~> 3.2'
-  gem.add_development_dependency 'guard-rspec'
-  gem.add_development_dependency 'rails'
-  gem.add_development_dependency 'capybara'
+  gem.add_development_dependency 'guard-rspec', '~> 4.5'
+  gem.add_development_dependency 'rails', '~> 4.2'
+  # gem.add_development_dependency 'capybara'
   #gem.add_development_dependency 'sqlite3'
 
 
