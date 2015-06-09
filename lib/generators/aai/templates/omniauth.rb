@@ -1,12 +1,12 @@
 Rails.application.config.middleware.use OmniAuth::Builder do
   if Rails.env.development?
     provider :developer, {
-      uid_field: 'persistent-id', #:'persistent-id', :unique_id
+      uid_field: 'persistent-id',
       fields: [:name, :email, :persistent_id, :unique_id]
     }
   else
     provider :aai, {
-      uid_field:      "uid",
+      uid_field:      "uid", # Defaults to :'persistent-id'. Alternative :unique_id
       name_field:     "displayName",
       info_fields: {
         unique_id:            "uniqueID",

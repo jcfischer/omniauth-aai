@@ -1,4 +1,4 @@
-class AaiCreateUser < ActiveRecord::Migration
+class CreateAaiUser < ActiveRecord::Migration
   def change
 
     create_table(:users) do |t|
