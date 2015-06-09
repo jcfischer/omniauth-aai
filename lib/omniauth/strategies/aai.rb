@@ -3,80 +3,71 @@ module OmniAuth
   module Strategies
     class Aai < OmniAuth::Strategies::Shibboleth
 
-      # 8 core attributes, which must be available for all users
+
+      # 8 core attributes available for all users
       CORE_ATTRIBUTES = {
-        swiss_ep_uid:          [:'uniqueID'],
-        surname:               [:'surname'],
-        first_name:            [:'givenName'],
-        mail:                  [:'mail'],
-        homeOrganization:      [:'homeOrganization'],
-        homeOrganizationType:  [:'homeOrganizationType'],
-        affiliation:           [:'affiliation']
-        # swiss_ep_uid:          [:'Shib-SwissEP-UniqueID'],
-        # first_name:            [:'Shib-InetOrgPerson-givenName'],
-        # surname:               [:'Shib-Person-surname'],
-        # mail:                  [:'Shib-InetOrgPerson-mail'],
-        # homeOrganization:      [:'Shib-SwissEP-HomeOrganization'],
-        # homeOrganizationType:  [:'Shib-SwissEP-HomeOrganizationType'],
-        # affiliation:           [:'Shib-EP-Affiliation']
+        unique_id:                "uniqueID",
+        persistent_id:            "persistent-id",
+        email:                    "mail",
+        first_name:               "givenName",
+        last_name:                "surname",
+        home_organization:        "homeOrganization",
+        home_organization_type:   "homeOrganizationType",
+        affiliation:              "affiliation"
       }
 
-      # 8 or more Shibboleth attributes, set by the Service Provider automatically if a user has a valid session
+      # 8 or more Shibboleth attributes, set by the Service Provider automatically for users with a valid session
       SHIBBOLETH_ATTRIBUTES = {
-        :entitlement => [:'entitlement'],
-        :preferredLanguage => [:'preferredLanguage'],
-        :'Shib-Application-ID' => [],
-        :'Shib-Assertion-01' => [],
-        :'Shib-Assertion-Count' => [],
-        :'Shib-Authentication-Instant' => [],
-        :'Shib-Authentication-Method' => [],
-        :'Shib-AuthnContext-Class' => [],
-        :'Shib-Identity-Provider' => [],
-        :'Shib-Session-ID' => []
-        # :entitlement => [:'Shib-EP-Entitlement'],
-        # :preferredLanguage => [:'Shib-InetOrgPerson-preferredLanguage'],
-        # :'Shib-Application-ID' => [],
-        # :'Shib-Assertion-01' => [],
-        # :'Shib-Assertion-Count' => [],
-        # :'Shib-Authentication-Instant' => [],
-        # :'Shib-Authentication-Method' => [],
-        # :'Shib-AuthnContext-Class' => [],
-        # :'Shib-Identity-Provider' => [],
-        # :'Shib-Session-ID' => []
+        entitlement: 'entitlement',
+        preferredLanguage: 'preferredLanguage'
+        #   :'Shib-Application-ID' => [],
+        #   :'Shib-Assertion-01' => [],
+        #   :'Shib-Assertion-Count' => [],
+        #   :'Shib-Authentication-Instant' => [],
+        #   :'Shib-Authentication-Method' => [],
+        #   :'Shib-AuthnContext-Class' => [],
+        #   :'Shib-Identity-Provider' => [],
+        #   :'Shib-Session-ID' => []
       }
 
-      DEFAULT_EXTRA_FIELDS = (CORE_ATTRIBUTES.keys + SHIBBOLETH_ATTRIBUTES.keys)
-      DEFAULT_FIELDS = [:name, :email, :swiss_ep_uid ]
+      # DEFAULT_FIELDS = [:name, :email, :persistent_id, :unique_id]
+      DEFAULT_EXTRA_FIELDS = (SHIBBOLETH_ATTRIBUTES.keys)
+      # DEFAULT_EXTRA_FIELDS = (CORE_ATTRIBUTES.keys + SHIBBOLETH_ATTRIBUTES.keys)
 
-      # persistent-id is default uid
-      option :uid_field, :'persistent-id'
+      option :uid_field, 'persistent-id'
+      option :name_field, 'displayName'
+      option :email_field, 'mail'
+      # option :fields, DEFAULT_FIELDS
+      # option :info_fields, {}
+      option :info_fields, CORE_ATTRIBUTES
+      option :extra_fields, DEFAULT_EXTRA_FIELDS
+      # option :aai_fields, CORE_ATTRIBUTES
+      # option :aai_extra_fields, SHIBBOLETH_ATTRIBUTES
 
+      # Attributes checked to find out if there is a valid shibboleth session
+      option :shib_session_id_field, 'Shib-Session-ID'
+      option :shib_application_id_field, 'Shib-Application-ID'
+
+      option :request_type, :env
       option :debug, false
 
-      option :aai_fields, CORE_ATTRIBUTES
-
-      option :aai_extra_fields, SHIBBOLETH_ATTRIBUTES
-
-      option :fields, DEFAULT_FIELDS
-      option :extra_fields, DEFAULT_EXTRA_FIELDS
 
       # # # # #
       # Helper Methods
       # # # # #
-      def aai_attributes
-        options.aai_extra_fields.merge(options.aai_fields)
-      end
 
-      def read_env( attribute_key )
-        ([attribute_key] + (aai_attributes[attribute_key] || [])).each do | a |
-          v = request.env[a.to_s]
-          return v unless v.nil? || v.strip == ""
-        end
-      end
+      # def aai_attributes
+      #   options.aai_extra_fields.merge(options.aai_fields)
+      # end
 
-      # # # # #
-      # Rack
-      # # # # #
+      # def read_env( attribute_key )
+      #   ([attribute_key] + (aai_attributes[attribute_key] || [])).each do | a |
+      #     v = request.env[a.to_s]
+      #     return v unless v.nil? || v.strip == ""
+      #   end
+      # end
+
+
       def request_phase
         [
           302,
@@ -84,39 +75,77 @@ module OmniAuth
             'Location' => script_name + callback_path + query_string,
             'Content-Type' => 'text/plain'
           },
-          ["You are being redirected to Shibboleth SP/IdP for sign-in."]
+          ["You are being redirected to your SWITCHaai IdP for sign-in."]
         ]
       end
 
-      def callback_phase
-        super
-      end
+      # def request_params
+      #   case options[:request_type]
+      #   when :env, 'env', :header, 'header'
+      #     request.env
+      #   when :params, 'params'
+      #     request.params
+      #   end
+      # end
 
-      uid do
-        # persistent-id is default uid
-        request.env[options.uid_field.to_s]
-      end
+      # def request_param(key)
+      #   case options[:request_type]
+      #   when :env, 'env'
+      #     request.env[key]
+      #   when :header, 'header'
+      #     request.env["HTTP_#{key.upcase.gsub('-', '_')}"]
+      #   when :params, 'params'
+      #     request.params[key]
+      #   end
+      # end
 
-      info do
-        options.fields.inject({}) do |hash, field|
-          case field
-          when :name
-            hash[field] = "#{read_env(:first_name)} #{read_env(:surname)}"
-          when :email
-            hash[:email] = read_env(:mail)
-          else
-            hash[field] = read_env(field.to_s)
-          end
-          hash
-        end
-      end
+      # def callback_phase
+      #   if options[:debug]
+      #     # dump attributes
+      #     return [
+      #       200,
+      #       {
+      #         'Content-Type' => 'text/plain'
+      #       },
+      #       ["!!!!! This message is generated by omniauth-aai. To remove it set :debug to false. !!!!!\n#{request_params.sort.map {|i| "#{i[0]}: #{i[1]}" }.join("\n")}"]
+      #     ]
+      #   end
+      #   return fail!(:no_aai_session) unless (request_param(options.shib_session_id_field.to_s) || request_param(options.shib_application_id_field.to_s))
+      #   super
+      # end
 
-      extra do
-        options.extra_fields.inject({:raw_info => {}}) do |hash, field|
-          hash[:raw_info][field] = read_env(field.to_s)
-          hash
-        end
-      end
+      # def option_handler(option_field)
+      #   if option_field.class == String ||
+      #     option_field.class == Symbol
+      #     request_param(option_field.to_s)
+      #   elsif option_field.class == Proc
+      #     option_field.call(self.method(:request_param))
+      #   end
+      # end
+
+      # uid do
+      #   option_handler(options.uid_field)
+      #   # persistent-id is default uid
+      #   # request.env[options.uid_field.to_s]
+      # end
+
+      # info do
+      #   res = {
+      #     name: option_handler(options.name_field),
+      #     email: option_handler(options.email_field)
+      #   }
+      #   options.info_fields.each_pair do |key, field|
+      #     res[key] = option_handler(field)
+      #   end
+      #   res
+      # end
+
+      # extra do
+      #   options.extra_fields.inject({:raw_info => {}}) do |hash, field|
+      #     hash[:raw_info][field] = request_param(field.to_s)
+      #     hash
+      #   end
+      # end
 
     end
   end

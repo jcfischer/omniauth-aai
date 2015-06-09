@@ -19,16 +19,14 @@ Install as a gem via Gemfile or with
 
 ### Generator
 
-    rails generate aai:install
+    rails generate aai:setup
 
 This will generate some basic authenthication objects for rails:
 
-* config/omniauth.rb
+* config/initializers/omniauth.rb
 * app/controller/session_controller.rb
 * app/models/user.rb
-* db/migrate/create_users_adapt_and_copy_to_migration.rb
-
-You'll need to configure at least the 'db/migrate/create_users_adapt_and_copy_to_migration.rb' file. Just run 'rails g migration createUsersTable' copy the content of 'create_users_adapt_and_copy_to_migration.rb' and delete it.
+* db/migrate/create_aai_user.rb
 
 You can run it with '--persist false' if you don't want to persist the user to the local db.
 
@@ -50,7 +48,7 @@ By default, you will get all the standard SWITCHaai values, or you can configure
     Rails.application.config.middleware.use OmniAuth::Builder do
       provider :aai,{
         :uid_field => :'persistent-id',
-        :fields => [:name, :email, :swiss_ep_uid],
+        :fields => [:name, :email, :unique_id],
         :extra_fields => [:'Shib-Authentication-Instant']# See lib/omniauth/strategies/aai.rb for full list.
       }
 ```
@@ -74,9 +72,9 @@ In development/local mode or in cases where you don't have a SWITCHaai Service P
     Rails.application.config.middleware.use OmniAuth::Builder do
       if Rails.env.development?
         provider :developer, {
-          :uid_field => :'persistent-id',
-          :fields => OmniAuth::Strategies::Aai::DEFAULT_FIELDS,
-          :extra_fields => OmniAuth::Strategies::Aai::DEFAULT_EXTRA_FIELDS
+          uid_field: :'persistent-id',
+          fields: [:name, :email, :persistent_id, :unique_id],
+          extra_fields: OmniAuth::Strategies::Aai::DEFAULT_EXTRA_FIELDS
         }
       end
     end
@@ -95,7 +93,7 @@ When you deploy a new application, you may want to confirm the assumed attribute
 
 ### Current User
 
-If you want to use the build in User object and the 'current_user' functionality, you can use the magic call 'has_current_user'
+If you want to use the build in User object and the 'current_user' functionality, you can include the has_current_user method to concerned ActionController or the ApplicationController if you want to have the functionality available globally.
 
 ```ruby
     class ApplicationController < ActionController::Base
@@ -103,26 +101,3 @@ If you want to use the build in User object and the 'current_user' functionality
       has_current_user
     end
 ```
-
-
-## License (MIT License)
-
-Copyright (C) SWITCH, Zurich, original copyright (omniauth-shibboleth) 2011 by Toyokazu Akiyama.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
