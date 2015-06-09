@@ -19,6 +19,7 @@ module Aai
     def copy_session_controller_file
       if true
         copy_file "session_controller.rb", "app/controllers/session_controller.rb"
+        inject_into_class "app/controllers/application_controller.rb", ApplicationController, "  has_current_user\n"
         route("post '/auth/:provider/callback', to: 'session#create', as: 'auth_callback'")
         route("get '/auth/failure', to: 'session#failure', as: 'auth_failure'")
         route("get '/auth/logout',  to: 'session#destroy', as: 'logout'")
