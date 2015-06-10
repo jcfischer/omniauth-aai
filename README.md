@@ -30,6 +30,8 @@ This will generate some basic authenthication objects for rails:
 
 You can run it with '--persist false' if you don't want to persist the user to the local db.
 
+You'll need to run 'rake db:migrate' afterwards to create the user table.
+
 ### Additional Shibboleth attributes
 
 By default, you will get all the core SWITCHaai values, or you can configure it via options:
