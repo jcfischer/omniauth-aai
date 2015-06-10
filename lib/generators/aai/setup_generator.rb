@@ -29,7 +29,7 @@ module Aai
     def copy_user_file
       template "user.rb", "app/models/user.rb"
       migration_template "migration.rb", "db/migrate/create_aai_user.rb" if options[:persist]
-      rake "db:migrate"
+      # rake "db:migrate"
     end
 
     def self.next_migration_number(path)

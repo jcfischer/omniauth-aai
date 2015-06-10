@@ -57,34 +57,34 @@ module OmniAuth
         ]
       end
 
-      def request_params
-        super
-      end
+      # def request_params
+      #   super
+      # end
 
-      def request_param(key)
-        super
-      end
+      # def request_param(key)
+      #   super
+      # end
 
-      def callback_phase
-        super
-      end
+      # def callback_phase
+      #   super
+      # end
 
-      def option_handler(option_field)
-        super
-      end
+      # def option_handler(option_field)
+      #   super
+      # end
 
 
-      uid do
-        option_handler(options.uid_field)
-      end
+      # uid do
+      #   option_handler(options.uid_field)
+      # end
 
-      info do
-        super
-      end
+      # info do
+      #   super
+      # end
 
-      extra do
-        super
-      end
+      # extra do
+      #   super
+      # end
 
     end
   end

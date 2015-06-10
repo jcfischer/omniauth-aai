@@ -1,12 +1,13 @@
 Description:
-    Create Config / User / Session / Migration for Omniauth Aai Authentication
+  Create Config / User / Session / Migration for Omniauth Aai Authentication
 
 Example:
-    rails generate aai:install [--persist]
+  rails generate aai:setup [--persist]
 
-    This will create:
-      config/omniauth.rb
-      app/controller/session_controller.rb
-      app/models/user.rb
-      db/migrate/create_users_adapt_and_copy_to_migration.rb #configure this
+  This will create:
+    config/initializers/omniauth.rb
+    app/controller/session_controller.rb
+    app/models/user.rb
+    db/migrate/<timestamp>_create_aai_user.rb
 
+  "rake db:migrate" will be executed at the end. Additionally the has_current_user method is being added to ApplicationController.
