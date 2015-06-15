@@ -1,6 +1,10 @@
-class SessionController < ApplicationController
+class SessionsController < ApplicationController
 
+  before_filter :authenticate!, only: :new
   skip_before_filter :verify_authenticity_token, only: :create, if: Rails.env.development?
+
+  def new
+  end
 
   def create
 <% if options[:persist] -%>

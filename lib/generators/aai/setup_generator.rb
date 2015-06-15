@@ -16,13 +16,14 @@ module Aai
       copy_file "omniauth.rb", "config/initializers/omniauth.rb"
     end
 
-    def copy_session_controller_file
+    def copy_sessions_controller_file
       if true
-        template "session_controller.rb", "app/controllers/session_controller.rb"
+        template "sessions_controller.rb", "app/controllers/sessions_controller.rb"
         inject_into_class "app/controllers/application_controller.rb", ApplicationController, "  has_current_user\n"
-        route("post '/auth/:provider/callback', to: 'session#create', as: 'auth_callback'")
-        route("get '/auth/failure', to: 'session#failure', as: 'auth_failure'")
-        route("get '/auth/logout',  to: 'session#destroy', as: 'logout'")
+        route("post '/auth/:provider/callback', to: 'sessions#create', as: 'auth_callback'")
+        route("get '/auth/failure', to: 'sessions#failure', as: 'auth_failure'")
+        route("get '/auth/logout',  to: 'sessions#destroy', as: 'logout'")
+        route("get '/auth/login',  to: 'sessions#login', as: 'login'")
       end
     end
 
