@@ -23,7 +23,7 @@ module Aai
         route("post '/auth/:provider/callback', to: 'sessions#create', as: 'auth_callback'")
         route("get '/auth/failure', to: 'sessions#failure', as: 'auth_failure'")
         route("get '/auth/logout',  to: 'sessions#destroy', as: 'logout'")
-        route("get '/auth/login',  to: 'sessions#login', as: 'login'")
+        route("get '/auth/login',  to: 'sessions#new', as: 'login'")
       end
     end
 
