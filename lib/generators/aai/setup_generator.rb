@@ -20,10 +20,10 @@ module Aai
       if true
         template "sessions_controller.rb", "app/controllers/sessions_controller.rb"
         inject_into_class "app/controllers/application_controller.rb", ApplicationController, "  has_current_user\n"
-        route("post '/auth/:provider/callback', to: 'sessions#create', as: 'auth_callback'")
-        route("get '/auth/failure', to: 'sessions#failure', as: 'auth_failure'")
-        route("get '/auth/logout',  to: 'sessions#destroy', as: 'logout'")
-        route("get '/auth/login',  to: 'sessions#new', as: 'login'")
+        route("post '/auth/:provider/callback', to: 'sessions#create', as: :auth_callback")
+        route("get '/auth/failure', to: 'sessions#failure', as: :auth_failure")
+        route("get '/auth/logout',  to: 'sessions#destroy', as: :logout")
+        route("get '/auth/login',  to: 'sessions#new', as: :login")
       end
     end
 
