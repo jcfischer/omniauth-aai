@@ -23,13 +23,11 @@ module Omniauth
         @user
       end
 
-      # Set the current user
       def current_user=(user)
         @user = user
         session[:current_user] = @user.marshal unless @user.nil?
       end
 
-      # Authenticate User
       def authenticate!
         return if authenticated?
         session[:return_to] = request.url
@@ -40,7 +38,6 @@ module Omniauth
         end
       end
 
-      # User authenticated?
       def authenticated?
         return true if self.current_user.present? && self.current_user.uid.present?
         return false

@@ -24,7 +24,7 @@ Install as a gem via Gemfile or with
 This will generate some basic authenthication objects for rails:
 
 * config/initializers/omniauth.rb
-* app/controller/session_controller.rb
+* app/controller/sessions_controller.rb
 * app/models/user.rb
 * db/migrate/<timestamp>_create_aai_user.rb
 

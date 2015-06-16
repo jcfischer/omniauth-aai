@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
 
-  get '/auth/logout',  to: 'session#destroy', as: 'logout'
-  get '/auth/failure', to: 'session#failure', as: 'auth_failure'
-  post '/auth/:provider/callback', to: 'session#create', as: 'auth_callback'
+  get '/auth/login', to: 'sessions#new', as: 'login'
+  get '/auth/logout',  to: 'sessions#destroy', as: 'logout'
+  get '/auth/failure', to: 'sessions#failure', as: 'auth_failure'
+  post '/auth/:provider/callback', to: 'sessions#create', as: 'auth_callback'
   get "welcome/index"
   get "welcome/protected"
 
