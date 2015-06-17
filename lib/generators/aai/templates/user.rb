@@ -1,32 +1,25 @@
 class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
 <% if options[:persist] -%>
   # attr_accessible :uid
-  attr_accessor :aai
+  # attr_accessor :aai
   PERSISTENT = true
 
   def self.update_or_create_with_omniauth_aai(omniauth_aai)
-    user = find_or_build_with_uid(omniauth_aai['uid'])
-    user.attributes = {
-      unique_id:          omniauth_aai.info.unique_id,
-      persistent_id:      omniauth_aai.info.persistent_id,
-      email:              omniauth_aai.info.email,
-      first_name:         omniauth_aai.info.first_name,
-      last_name:          omniauth_aai.info.last_name,
-      home_organization:  omniauth_aai.info.home_organization,
-      # affiliation: omniauth_aai.info.affiliation,
-      raw_data:           omniauth_aai.respond_to?(:to_hash) ? omniauth_aai.to_hash : omniauth_aai.inspect
-    }
-    user.save
-    user
-  end
-
-  def self.find_or_build_with_uid(aai_uid)
-    if aai_uid.present?
-      where(uid: aai_uid).first || new(uid: aai_uid)
-    else
-      new
+    where(provider: omniauth_aai.provider, uid: omniauth_aai.uid).first_or_create do |user|
+      user.provider           = omniauth_aai.provider,
+      user.uid                = omniauth_aai.uid,
+      user.unique_id          = omniauth_aai.info.unique_id,
+      user.persistent_id      = omniauth_aai.info.persistent_id,
+      user.email              = omniauth_aai.info.email,
+      user.first_name         = omniauth_aai.info.first_name,
+      user.last_name          = omniauth_aai.info.last_name,
+      user.home_organization  = omniauth_aai.info.home_organization,
+      # user.affiliation      = omniauth_aai.info.affiliation,
+      user.raw_data           = omniauth_aai.respond_to?(:to_hash) ? omniauth_aai.to_hash : omniauth_aai.inspect
+      user.save
     end
   end
+
 <% else -%>
   attr_accessor :aai, :uid
   PERSISTENT = false
