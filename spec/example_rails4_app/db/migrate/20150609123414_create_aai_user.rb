@@ -3,6 +3,7 @@ class CreateAaiUser < ActiveRecord::Migration
 
     create_table(:users) do |t|
       t.string :uid
+      t.string :provider
       t.string :unique_id
       t.string :persistent_id
       t.string :email
