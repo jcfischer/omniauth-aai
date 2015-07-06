@@ -1,7 +1,5 @@
 class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
 <% if options[:persist] -%>
-  # attr_accessible :uid
-  # attr_accessor :aai
   PERSISTENT = true
 
   def self.update_or_create_with_omniauth_aai(omniauth_aai)
@@ -20,10 +18,27 @@ class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
     end
   end
 
+  def name
+    "#{first_name} #{last_name}"
+  rescue
+    nil
+  end
+
+  def marshal
+    self.uid
+  end
+
+  def self.unmarshal(session_data)
+    user = User.find_by_uid(session_data)
+  end
+
+  def unmarshal(session_data)
+    self.reload
+  end
+
 <% else -%>
   attr_accessor :aai, :uid
   PERSISTENT = false
-<% end -%>
 
   def name
     aai[:info][:name]
@@ -37,19 +52,6 @@ class User <%= options[:persist]  ? "< ActiveRecord::Base" : "" %>
     nil
   end
 
-<% if options[:persist] -%>
-  def marshal
-    self.uid
-  end
-
-  def self.unmarshal(session_data)
-    user = User.find_by_uid(session_data)
-  end
-
-  def unmarshal(session_data)
-    self.reload
-  end
-<% else -%>
   def marshal
     {
       id: self.uid,
