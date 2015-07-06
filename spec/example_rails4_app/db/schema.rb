@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20150609123414) do
 
   create_table "users", force: :cascade do |t|
     t.string   "uid"
+    t.string   "provider"
     t.string   "unique_id"
     t.string   "persistent_id"
     t.string   "email"
