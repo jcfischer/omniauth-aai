@@ -31,7 +31,7 @@ module Omniauth
       def authenticate!
         return if authenticated?
         session[:return_to] = request.url
-        if Rails.env.development?
+        unless Rails.env.production?
           redirect_to "/auth/developer"
         else
           redirect_to "/auth/aai"
