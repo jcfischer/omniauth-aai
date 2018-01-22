@@ -18,7 +18,9 @@ module OmniAuth
       # 8 or more Shibboleth attributes, set by the Service Provider automatically for users with a valid session
       SHIBBOLETH_ATTRIBUTES = {
         entitlement: 'entitlement',
-        preferredLanguage: 'preferredLanguage'
+        preferredLanguage: 'preferredLanguage',
+        swissEduPersonAdditionalEmail: 'swissEduPersonAdditionalEmail',
+        swissEduIDLinkedAffiliation: 'swissEduIDLinkedAffiliation'
         #   :'Shib-Application-ID' => [],
         #   :'Shib-Assertion-01' => [],
         #   :'Shib-Assertion-Count' => [],

@@ -16,7 +16,9 @@ Rails.application.config.middleware.use OmniAuth::Builder do
         last_name:            "surname",
         home_organization:    "homeOrganization",
         preferred_language:   "preferredLanguage",
-        affiliation:          "affiliation"
+        affiliation:          "affiliation",
+        swissEduPersonAdditionalEmail: "swissEduPersonAdditionalEmail",
+        swissEduIDLinkedAffiliation: "swissEduIDLinkedAffiliation"
       }
     }
   end
