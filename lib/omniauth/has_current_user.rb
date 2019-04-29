@@ -15,17 +15,17 @@ module Omniauth
     end
 
     module InstanceMethods
-      @user = nil
+      @_omniauth_user = nil
 
       def current_user
-        return nil unless @user.present? || session[:current_user].present?
-        @user = @user || User.unmarshal( session[:current_user] )
-        @user
+        return nil unless @_omniauth_user.present? || session[:current_user].present?
+        @_omniauth_user = @_omniauth_user || User.unmarshal(session[:current_user] )
+        @_omniauth_user
       end
 
       def current_user=(user)
-        @user = user
-        session[:current_user] = @user.marshal unless @user.nil?
+        @_omniauth_user = user
+        session[:current_user] = @_omniauth_user.marshal unless @_omniauth_user.nil?
       end
 
       def authenticate!
